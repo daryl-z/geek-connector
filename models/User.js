@@ -11,9 +11,12 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  avator: {
+  password: {
     type: String,
     required: true
+  },
+  avator: {
+    type: String
   },
   date: {
     type: Date,
