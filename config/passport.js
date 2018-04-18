@@ -7,10 +7,19 @@ const keys = require("../config/keys");
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = keys.secretOrPrivateKey;
+
 module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
-      console.log(jwt_payload);
+      //按照返回的当前用户的id在数据库中查找用户
+      User.findById(jwt_payload.id)
+        .then(user => {
+          if (user) {
+            return done(null, user);
+          }
+          return done(null, false);
+        })
+        .catch(err => console.log(err));
     })
   );
 };

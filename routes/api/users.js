@@ -6,6 +6,9 @@ const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport");
 
+// 登录注册输入验证
+const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
 // Load User model
 const User = require("../../models/User");
 
@@ -18,9 +21,16 @@ router.get("/test", (req, res) => res.json({ msg: "Users Works" }));
 // @desc Register user
 // @access Public
 router.post("/register", (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+  // 验证是否有错误
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      return res.status(400).json({ email: "email already exists" });
+      errors.email = "该邮箱已注册";
+      return res.status(400).json({ errors });
     } else {
       const avatar = gravatar.url(req.body.email, {
         s: "200", // Size
@@ -54,14 +64,21 @@ router.post("/register", (req, res) => {
 // @desc Login User /Returning JWT Token
 // @access Public
 router.post("/login", (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+  // 验证是否有错误
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const email = req.body.email;
   const password = req.body.password;
 
   // 通过email在数据库中寻找用户
   User.findOne({ email }).then(user => {
-    // 用户是否存在
+    // 如果用户不存在
     if (!user) {
-      return res.status(404).json({ email: "用户不存在" });
+      errors.email = "用户不存在";
+      return res.status(404).json(errors);
     }
     // 验证密码
     bcrypt.compare(password, user.password).then(isMatch => {
@@ -82,7 +99,8 @@ router.post("/login", (req, res) => {
           }
         );
       } else {
-        return res.status(400).json({ password: "密码不正确" });
+        errors.password = "密码不正确";
+        return res.status(400).json(errors);
       }
     });
   });
@@ -95,7 +113,11 @@ router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.json({ msg: "Success" });
+    res.json({
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email
+    });
   }
 );
 
