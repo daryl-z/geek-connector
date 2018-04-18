@@ -8,7 +8,7 @@ const ProfileSchema = new Schema({
     ref: "users"
   },
   handle: {
-    typ: String,
+    type: String,
     required: true,
     max: 40
   },
