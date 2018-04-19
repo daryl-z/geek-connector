@@ -3,6 +3,8 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
 
+//load validation
+const validateProfileInput = require("../../validation/profile");
 //load profile model
 const Profile = require("../../models/Profile");
 // user model
@@ -21,11 +23,13 @@ router.get(
   (req, res) => {
     const errors = {};
     Profile.findOne({ user: req.user.id })
+      .populate("user", ["name", "avatar"])
       .then(profile => {
         if (!profile) {
           errors.noprofile = "这个用户没有简介";
           return res.status(404).json(errors);
         }
+        res.json(profile);
       })
       .catch(err => res.status(404).json(err));
   }
@@ -38,9 +42,14 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const { errors, isValid } = validateProfileInput(req.body);
+    // check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
     // get fields
     const profileFields = {};
-    profileFIelds.user = req.user.id;
+    profileFields.user = req.user.id;
     if (req.body.handle) profileFields.handle = req.body.handle;
     if (req.body.company) profileFields.company = req.body.company;
     if (req.body.website) profileFields.website = req.body.website;
@@ -56,11 +65,12 @@ router.post(
 
     // Social
     profileFields.social = {};
-    if (req.body.weibo) profileFields.social.youtube = req.body.weibo;
-    if (req.body.bili) profileFields.social.twitter = req.body.bili;
-    if (req.body.qq) profileFields.social.facebook = req.body.qq;
-    if (req.body.wechat) profileFields.social.linkedin = req.body.wechat;
-    if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
+    if (req.body.weibo) profileFields.social.weibo = req.body.weibo;
+    if (req.body.bili) profileFields.social.bili = req.body.bili;
+    if (req.body.leetcode) profileFields.social.leetcode = req.body.leetcode;
+    if (req.body.wechat) profileFields.social.wechat = req.body.wechat;
+    if (req.body.stackoverflow)
+      profileFields.social.stackoverflow = req.body.stackoverflow;
 
     Profile.findOne({ user: req.user.id }).then(profile => {
       if (profile) {

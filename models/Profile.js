@@ -101,13 +101,13 @@ const ProfileSchema = new Schema({
     bili: {
       type: String
     },
-    qq: {
+    leetcode: {
+      type: String
+    },
+    stackoverflow: {
       type: String
     },
     wechat: {
-      type: String
-    },
-    instagram: {
       type: String
     }
   },

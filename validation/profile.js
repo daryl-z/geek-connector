@@ -10,20 +10,15 @@ module.exports = function validateProfileInput(data) {
   if (!validator.isLength(data.handle, { min: 2, max: 40 })) {
     errors.handle = "handle needs to between 2 and 4 characters";
   }
-  if (!validator.isEmpty(data.handle)) {
+  if (validator.isEmpty(data.handle)) {
     errors.handle = "Profile handle is required";
   }
 
-  if (!validator.isEmpty(data.status)) {
-    errors.status = "Status field is required";
+  if (validator.isEmpty(data.status)) {
+    errors.status = "工作状态不能为空";
   }
-  if (!validator.isEmpty(data.skills)) {
-    errors.skills = "skills field is required";
-  }
-  if (!isEmpty(data.website)) {
-    if (!validator.isURL(data.website)) {
-      errors.website = "不是一个合法的地址";
-    }
+  if (validator.isEmpty(data.skills)) {
+    errors.skills = "技能不能为空";
   }
 
   if (!isEmpty(data.bili)) {
@@ -31,14 +26,34 @@ module.exports = function validateProfileInput(data) {
       errors.bili = "不是一个合法的地址";
     }
   }
+
   if (!isEmpty(data.weibo)) {
     if (!validator.isURL(data.weibo)) {
       errors.weibo = "不是一个合法的地址";
     }
   }
-  if (!isEmpty(data.qq)) {
-    if (!validator.isInt(data.qq, { min: 1, max: 15 })) {
-      errors.qq = "不是一个合法QQ号";
+
+  if (!isEmpty(data.website)) {
+    if (!validator.isURL(data.website)) {
+      errors.website = "不是一个合法的地址";
+    }
+  }
+
+  if (!isEmpty(data.leetcode)) {
+    if (!validator.isURL(data.leetcode)) {
+      errors.leetcode = "不是一个合法的地址";
+    }
+  }
+
+  if (!isEmpty(data.stackoverflow)) {
+    if (!validator.isURL(data.stackoverflow)) {
+      errors.stackoverflow = "不是一个合法的地址";
+    }
+  }
+
+  if (!isEmpty(data.wechat)) {
+    if (!validator.isLength(data.wechat, { min: 6, max: 20 })) {
+      errors.wechat = "只能是:6—20个字母、数字、下划线和减号,必须以字母开头";
     }
   }
 
