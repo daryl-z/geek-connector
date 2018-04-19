@@ -12,7 +12,12 @@ const User = require("../../models/User");
 // @route GET api/profile/test
 // @desc Tests profile route
 // @access Public
-router.get("/test", (req, res) => res.json({ msg: "Profiles Works" }));
+router.get("/test/:handle", (req, res) => {
+  Profile.findOne({ handle: req.params.handle })
+    .populate("user", ["name", "avatar"])
+    .then(skills => console.log(skills))
+    .catch(err => res.status(404).json(err));
+});
 
 // @route GET api/profile
 // @desc get current users profile
@@ -80,8 +85,7 @@ router.get("/handle/:handle", (req, res) => {
     .then(profile => {
       if (!profile) {
         errors.noprofile = "该用户没有创建简介";
-        res.status(404).json(errors);
-        return;
+        return res.status(404).json(errors);
       }
       res.json(profile);
     })
