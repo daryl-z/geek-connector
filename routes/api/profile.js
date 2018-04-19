@@ -35,21 +35,42 @@ router.get(
   }
 );
 
-// @route GET api/profile/handle/:handle
-// @desc get profile by handle
+// @route GET api/profile/user/:user_id
+// @desc get profile by userid
 // @access public
-
-reouter.get("/handle/:handle", (req, res) => {
-  Profile.findOne({ handle: req.params.handle })
+router.get("/user/:user_id", (req, res) => {
+  const errors = {};
+  Profile.findOne({ user: req.params.user_id })
     .populate("user", ["name", "avatar"])
     .then(profile => {
       if (!profile) {
         errors.noprofile = "该用户没有创建简介";
         res.status(404).json(errors);
+        return;
+      }
+      res.json(profile);
+      console.log(profile);
+    })
+    .catch(err => res.status(404).json({ profile: "用户不存在" }));
+});
+// { profile: "该用户没有简介" }
+
+// @route GET api/profile/handle/:handle
+// @desc get profile by userid
+// @access public
+router.get("/handle/:handle", (req, res) => {
+  const errors = {};
+  Profile.findOne({ handle: req.params.handle })
+    .populate("user", ["name", "avatar"])
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = "该用户没有创建简介1";
+        res.status(404).json(errors);
+        return;
       }
       res.json(profile);
     })
-    .catch(err => res.status(404).json(errors));
+    .catch(err => res.status(404).json(err));
 });
 
 // @route POST api/profile
@@ -88,27 +109,31 @@ router.post(
     if (req.body.stackoverflow)
       profileFields.social.stackoverflow = req.body.stackoverflow;
 
-    Profile.findOne({ user: req.user.id }).then(profile => {
-      if (profile) {
-        // Update   如果profile已存在就编辑
-        Profile.findOneAndUpdate(
-          { user: req.user.id },
-          { $set: profileFields },
-          { new: true }
-        ).then(profile => res.json(profile));
-      } else {
-        // create
-        // check if handle exists
-        Profile.findOne({ handle: profileFields.handle }).then(profile => {
-          if (profile) {
-            errors.handle = "That handle already exists";
-            res.status(400).json(errors);
-          }
-          // Save profile
-          new Profile(profileFields).save().then(profile => res.json(profile));
-        });
-      }
-    });
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        if (profile) {
+          // Update   如果profile已存在就编辑
+          Profile.findOneAndUpdate(
+            { user: req.user.id },
+            { $set: profileFields },
+            { new: true }
+          ).then(profile => res.json(profile));
+        } else {
+          // create
+          // check if handle exists
+          Profile.findOne({ handle: profileFields.handle }).then(profile => {
+            if (profile) {
+              errors.handle = "That handle already exists";
+              res.status(400).json(errors);
+            }
+            // Save profile
+            new Profile(profileFields)
+              .save()
+              .then(profile => res.json(profile));
+          });
+        }
+      })
+      .catch(err => res.json.status(404).json(err));
   }
 );
 module.exports = router;
