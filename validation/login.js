@@ -3,6 +3,8 @@ const isEmpty = require("./is-empty");
 
 module.exports = function validateLoginInput(data) {
   let errors = {};
+
+  // 防止输入是undefined validator.isEmpty只能对string进行验证
   data.email = !isEmpty(data.email) ? data.email : "";
   data.password = !isEmpty(data.password) ? data.password : "";
 
