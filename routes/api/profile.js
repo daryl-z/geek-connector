@@ -45,15 +45,30 @@ router.get("/user/:user_id", (req, res) => {
     .then(profile => {
       if (!profile) {
         errors.noprofile = "该用户没有创建简介";
-        res.status(404).json(errors);
-        return;
+        return res.status(404).json(errors);
       }
       res.json(profile);
       console.log(profile);
     })
     .catch(err => res.status(404).json({ profile: "用户不存在" }));
 });
-// { profile: "该用户没有简介" }
+
+// @route GET api/profile/all
+// @desc Get all profile
+// @access public
+router.get("/all", (req, res) => {
+  const errors = {};
+  Profile.find()
+    .populate("user", ["name", "avatar"])
+    .then(profiles => {
+      if (!profiles) {
+        errors.noprofile = "没有任何简介";
+        return res.status(404).json(errors);
+      }
+      res.json(profiles);
+    })
+    .catch(err => res.status(404).json({ profiles: "没有任何简介" }));
+});
 
 // @route GET api/profile/handle/:handle
 // @desc get profile by userid
@@ -64,7 +79,7 @@ router.get("/handle/:handle", (req, res) => {
     .populate("user", ["name", "avatar"])
     .then(profile => {
       if (!profile) {
-        errors.noprofile = "该用户没有创建简介1";
+        errors.noprofile = "该用户没有创建简介";
         res.status(404).json(errors);
         return;
       }
