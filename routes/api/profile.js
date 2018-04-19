@@ -35,6 +35,23 @@ router.get(
   }
 );
 
+// @route GET api/profile/handle/:handle
+// @desc get profile by handle
+// @access public
+
+reouter.get("/handle/:handle", (req, res) => {
+  Profile.findOne({ handle: req.params.handle })
+    .populate("user", ["name", "avatar"])
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = "该用户没有创建简介";
+        res.status(404).json(errors);
+      }
+      res.json(profile);
+    })
+    .catch(err => res.status(404).json(errors));
+});
+
 // @route POST api/profile
 // @desc create or edit user profile
 // @access private
@@ -62,7 +79,6 @@ router.post(
     if (typeof req.body.skills !== "undefined") {
       profileFields.skills = req.body.skills.split(",");
     }
-
     // Social
     profileFields.social = {};
     if (req.body.weibo) profileFields.social.weibo = req.body.weibo;
