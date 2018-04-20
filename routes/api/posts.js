@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 
 // Post model
 const Post = require("../../models/Post");
+// Profile model
+const Profile = require("../../models/Profile");
 // validation
 const validatePostInput = require("../../validation/post");
 // @route GET api/posts/test
@@ -38,20 +40,59 @@ router.post(
 // @desc 获取所有Post
 // @access Public
 router.get("/", (req, res) => {
+  let error = { noposts: "没有加载到任何帖子" };
   Post.find()
-    .sort({ date: -1 })
-    .then(posts => res.json(posts))
-    .catch(err => res.status(404).json({ noposts: "没有找到这篇文章" }));
+    .then(posts => {
+      if (posts.length === 0) {
+        return res.status(404).json(errors);
+      }
+      posts
+        .sort({ date: -1 })
+        .then(posts => res.json(posts))
+        .catch(err => res.status(404).json(errors));
+    })
+    .catch(err => res.status(404).json(errors));
 });
 
 // @route GET api/posts/:id
 // @desc 按照Post的id获取Post，用作查看详情
 // @access Public
 router.get("/:id", (req, res) => {
+  let errors = { nopost: "没有找到这篇帖子" };
   Post.findById(req.params.id)
-    .sort({ date: -1 })
-    .then(posts => res.json(posts))
-    .catch(err => res.status(404).json({ nopost: "没有加载到文章" }));
+    .then(post => {
+      if (post === null) {
+        return res.status(404).json(errors);
+      }
+      post
+        .sort({ date: -1 })
+        .then(post => res.json(post))
+        .catch(err => res.status(404).json(errors));
+    })
+    .catch(err => res.status(404).json(errors));
 });
+
+// @route Delete api/posts/:id
+// @desc 删除post
+// @access Private
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      Post.findById(req.params.id)
+        .then(post => {
+          if (post.user.toString() !== req.user.id) {
+            return res
+              .status(401)
+              .json({ notauthrized: "当前用户没有删除其他用户帖子的权限！！" });
+          }
+
+          post.remove().then(() => res.json({ success: true }));
+        })
+        .catch(err => res.status(404).json({ postnotfound: "没有找到帖子" }));
+    });
+  }
+);
 
 module.exports = router;
