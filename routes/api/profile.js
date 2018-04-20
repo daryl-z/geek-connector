@@ -158,7 +158,7 @@ router.post(
   }
 );
 
-// @route GET api/profile/experience
+// @route POST api/profile/experience
 // @desc add exdperience to profile
 // @access Private
 router.post(
@@ -186,7 +186,7 @@ router.post(
   }
 );
 
-// @route GET api/profile/education
+// @route POST api/profile/education
 // @desc add education to profile
 // @access Private
 router.post(
@@ -214,6 +214,31 @@ router.post(
         .then(profile => res.json(profile))
         .catch(err => res.status(404).json(err));
     });
+  }
+);
+
+// @route E api/profile/experience/:exp_id
+// @desc Delete experience from  profile
+// @access Private
+router.delete(
+  "/experience/:exp_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        // Get remove index
+        const removeIndex = profile.experience
+          .map(item => item.id)
+          .indexOf(req.params.exp_id);
+        // Splice out of array
+        if (removeIndex === -1) {
+          return res.json({ notexist: "经历不存在" });
+        }
+        profile.experience.splice(removeIndex, 1);
+        //Save
+        profile.save().then(profile => res.json(profile));
+      })
+      .catch(err => res.status(404).json(err));
   }
 );
 
