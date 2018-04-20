@@ -34,4 +34,24 @@ router.post(
   }
 );
 
+// @route GET api/posts
+// @desc 获取所有Post
+// @access Public
+router.get("/", (req, res) => {
+  Post.find()
+    .sort({ date: -1 })
+    .then(posts => res.json(posts))
+    .catch(err => res.status(404).json({ noposts: "没有找到这篇文章" }));
+});
+
+// @route GET api/posts/:id
+// @desc 按照Post的id获取Post，用作查看详情
+// @access Public
+router.get("/:id", (req, res) => {
+  Post.findById(req.params.id)
+    .sort({ date: -1 })
+    .then(posts => res.json(posts))
+    .catch(err => res.status(404).json({ nopost: "没有加载到文章" }));
+});
+
 module.exports = router;
