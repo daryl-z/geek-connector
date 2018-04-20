@@ -243,7 +243,7 @@ router.delete(
 );
 
 // @route DELETE api/profile/education/:edu_id
-// @desc Delete education from  profile
+// @desc 从简介中删除教育信息
 // @access Private
 router.delete(
   "/education/:edu_id",
