@@ -217,7 +217,7 @@ router.post(
   }
 );
 
-// @route E api/profile/experience/:exp_id
+// @route DELETE api/profile/experience/:exp_id
 // @desc Delete experience from  profile
 // @access Private
 router.delete(
@@ -242,7 +242,7 @@ router.delete(
   }
 );
 
-// @route E api/profile/education/:edu_id
+// @route DELETE api/profile/education/:edu_id
 // @desc Delete education from  profile
 // @access Private
 router.delete(
@@ -264,6 +264,21 @@ router.delete(
         profile.save().then(profile => res.json(profile));
       })
       .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route E api/profile
+// @desc 删除当前用户的所有信息 相当于用户可以删除自己账号的所有信息
+// @access Private
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOneAndRemove({ user: req.user.id }).then(() => {
+      User.findOneAndRemove({ _id: req.user.id }).then(() =>
+        req.json({ success: true })
+      );
+    });
   }
 );
 
