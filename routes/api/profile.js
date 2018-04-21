@@ -78,7 +78,7 @@ router.get("/all", (req, res) => {
 });
 
 // @route GET api/profile/handle/:handle
-// @desc get profile by
+// @desc get profile by handle
 // @access public
 router.get("/handle/:handle", (req, res) => {
   const errors = {};
