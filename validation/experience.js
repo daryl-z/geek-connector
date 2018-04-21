@@ -3,7 +3,6 @@ const isEmpty = require("./is-empty");
 
 module.exports = function validateExperienceInput(data) {
   let errors = {};
-
   // 防止输入是undefined validator.isEmpty只能对string进行验证
   data.title = !isEmpty(data.title) ? data.title : "";
   data.company = !isEmpty(data.company) ? data.company : "";

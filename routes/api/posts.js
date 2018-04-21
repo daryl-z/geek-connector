@@ -41,7 +41,7 @@ router.post(
 // @access Public
 router.get("/", (req, res) => {
   let errors = { noposts: "没有加载到任何帖子" };
-  console.log(Post.find());
+  //sort方法是mongoose Query.prototype.sort -1表示降序
   Post.find()
     .sort({ date: -1 })
     .then(posts => {
@@ -83,7 +83,7 @@ router.delete(
               .status(401)
               .json({ notauthrized: "当前用户没有删除其他用户帖子的权限！！" });
           }
-
+          // Model.prototype.remove() 从数据库移除当前文档
           post.remove().then(() => res.json({ success: true }));
         })
         .catch(err => res.status(404).json({ postnotfound: "没有找到帖子" }));
@@ -101,19 +101,91 @@ router.post(
     Profile.findOne({ user: req.user.id }).then(profile => {
       Post.findById(req.params.id)
         .then(post => {
-          // 如果当前用户在点赞数组中已经存在 则不能再点赞了
+          // 如果当前用户在点赞数组中已经存在(筛选之后数组长度大于0) 则取消点赞
           if (
             post.likes.filter(like => like.user.toString() === req.user.id)
               .length > 0
           ) {
-            return res.status(400).json({ alreadyliked: "你已经点过赞了哦" });
+            // 获取想要移除的下标
+            const index = post.likes
+              .map(item => item.user.toString())
+              .indexOf(req.user.id);
+            if (index > -1) {
+              post.likes.splice(index, 1);
+              return post.save().then(post => res.json(post));
+            }
           }
-          // 将用户id添加进likes数组
+          // 如果当前用户在踩数组中 则取消踩 然后赞
+          if (
+            post.unlikes.filter(
+              unlike => unlike.user.toString() === req.user.id
+            ).length > 0
+          ) {
+            const index = post.unlikes
+              .map(item => item.user.toString())
+              .indexOf(req.user.id);
+            if (index > -1) {
+              post.unlikes.splice(index, 1);
+              post.likes.unshift({ user: req.user.id });
+              return post.save().then(post => res.json(post));
+            }
+          }
+          // 如果都不在 则将用户id添加进likes数组
           post.likes.unshift({ user: req.user.id });
           post.save().then(post => res.json(post));
         })
         .catch(err =>
-          res.status(404).json({ postnotfound: "没有找到该帖子！请刷新页面" })
+          res
+            .status(404)
+            .json({ postnotfound: "没有找到该帖子！请尝试刷新页面" })
+        );
+    });
+  }
+);
+
+// @route POST  api/posts/unlike/:id
+// @desc 取消喜欢某帖子
+// @access Private
+router.post(
+  "/unlike/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      Post.findById(req.params.id)
+        .then(post => {
+          // 如果当前用户在点赞数组中已经存在 则取消点赞 改为踩
+          if (
+            post.likes.filter(like => like.user.toString() === req.user.id)
+              .length > 0
+          ) {
+            const index = post.likes.indexOf(req.params.id);
+            if (index > -1) {
+              post.likes.splice(index, 1);
+              post.unlikes.unshift({ user: req.user.id });
+              return post.save().then(post => res.json(post));
+            }
+          }
+          // 如果已经踩了 则取消
+          if (
+            post.unlikes.filter(
+              unlike => unlike.user.toString() === req.user.id
+            ).length > 0
+          ) {
+            // const index = post.unlikes.indexOf(req.params.id);
+            // if (index > -1) {
+            //   post.unlikes.splice(index, 1);
+            //   return post.save().then(post => res.json(post));
+            // }
+          }
+
+          // 如果又没赞又没踩 则踩
+          post.unlikes.unshift({ user: req.user.id });
+          post.save().then(post => res.json(post));
+        })
+        .catch(err =>
+          res
+            .status(404)
+            .json({ postnotfound: "没有找到该帖子！请尝试刷新页面" })
         );
     });
   }
