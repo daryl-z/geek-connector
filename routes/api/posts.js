@@ -153,7 +153,7 @@ router.post(
     Profile.findOne({ user: req.user.id }).then(profile => {
       Post.findById(req.params.id)
         .then(post => {
-          // 如果当前用户在点赞数组中已经存在 则取消点赞 改为踩
+          // 如果当前用户已赞 则取消点赞 改为踩
           if (
             post.likes.filter(like => like.user.toString() === req.user.id)
               .length > 0
@@ -166,12 +166,6 @@ router.post(
               post.unlikes.unshift({ user: req.user.id });
               return post.save().then(post => res.json(post));
             }
-            // const index = post.likes.indexOf(req.params.id);
-            // if (index > -1) {
-            //   post.likes.splice(index, 1);
-            //   post.unlikes.unshift({ user: req.user.id });
-            //   return post.save().then(post => res.json(post));
-            // }
           }
           // 如果已经踩了 则取消
           if (
@@ -186,11 +180,6 @@ router.post(
               post.unlikes.splice(index, 1);
               return post.save().then(post => res.json(post));
             }
-            // const index = post.unlikes.indexOf(req.params.id);
-            // if (index > -1) {
-            //   post.unlikes.splice(index, 1);
-            //   return post.save().then(post => res.json(post));
-            // }
           }
 
           // 如果又没赞又没踩 则踩
