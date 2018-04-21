@@ -158,12 +158,20 @@ router.post(
             post.likes.filter(like => like.user.toString() === req.user.id)
               .length > 0
           ) {
-            const index = post.likes.indexOf(req.params.id);
+            const index = post.likes
+              .map(item => item.user.toString())
+              .indexOf(req.user.id);
             if (index > -1) {
               post.likes.splice(index, 1);
               post.unlikes.unshift({ user: req.user.id });
               return post.save().then(post => res.json(post));
             }
+            // const index = post.likes.indexOf(req.params.id);
+            // if (index > -1) {
+            //   post.likes.splice(index, 1);
+            //   post.unlikes.unshift({ user: req.user.id });
+            //   return post.save().then(post => res.json(post));
+            // }
           }
           // 如果已经踩了 则取消
           if (
@@ -171,6 +179,13 @@ router.post(
               unlike => unlike.user.toString() === req.user.id
             ).length > 0
           ) {
+            const index = post.unlikes
+              .map(item => item.user.toString())
+              .indexOf(req.user.id);
+            if (index > -1) {
+              post.unlikes.splice(index, 1);
+              return post.save().then(post => res.json(post));
+            }
             // const index = post.unlikes.indexOf(req.params.id);
             // if (index > -1) {
             //   post.unlikes.splice(index, 1);
