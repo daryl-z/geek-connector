@@ -40,16 +40,15 @@ router.post(
 // @desc 获取所有Post
 // @access Public
 router.get("/", (req, res) => {
-  let error = { noposts: "没有加载到任何帖子" };
+  let errors = { noposts: "没有加载到任何帖子" };
+  console.log(Post.find());
   Post.find()
+    .sort({ date: -1 })
     .then(posts => {
       if (posts.length === 0) {
         return res.status(404).json(errors);
       }
-      posts
-        .sort({ date: -1 })
-        .then(posts => res.json(posts))
-        .catch(err => res.status(404).json(errors));
+      res.json(posts);
     })
     .catch(err => res.status(404).json(errors));
 });
@@ -64,10 +63,7 @@ router.get("/:id", (req, res) => {
       if (post === null) {
         return res.status(404).json(errors);
       }
-      post
-        .sort({ date: -1 })
-        .then(post => res.json(post))
-        .catch(err => res.status(404).json(errors));
+      res.json(post);
     })
     .catch(err => res.status(404).json(errors));
 });
@@ -95,4 +91,31 @@ router.delete(
   }
 );
 
+// @route POST  api/posts/like/:id
+// @desc 喜欢某帖子
+// @access Private
+router.post(
+  "/like/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      Post.findById(req.params.id)
+        .then(post => {
+          // 如果当前用户在点赞数组中已经存在 则不能再点赞了
+          if (
+            post.likes.filter(like => like.user.toString() === req.user.id)
+              .length > 0
+          ) {
+            return res.status(400).json({ alreadyliked: "你已经点过赞了哦" });
+          }
+          // 将用户id添加进likes数组
+          post.likes.unshift({ user: req.user.id });
+          post.save().then(post => res.json(post));
+        })
+        .catch(err =>
+          res.status(404).json({ postnotfound: "没有找到该帖子！请刷新页面" })
+        );
+    });
+  }
+);
 module.exports = router;
