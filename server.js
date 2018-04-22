@@ -33,4 +33,4 @@ app.use("/api/posts", posts);
 app.use("/api/profile", profile);
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server Ruing On Port ${port}...`));
+app.listen(port, () => console.log(`Server Running On Port ${port}...`));

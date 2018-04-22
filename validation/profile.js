@@ -8,10 +8,10 @@ module.exports = function validateProfileInput(data) {
   data.skills = !isEmpty(data.skills) ? data.skills : "";
 
   if (!validator.isLength(data.handle, { min: 2, max: 40 })) {
-    errors.handle = "handle needs to between 2 and 4 characters";
+    errors.handle = "简介标题需要在2到40个字符之间";
   }
   if (validator.isEmpty(data.handle)) {
-    errors.handle = "Profile handle is required";
+    errors.handle = "简介的标题是必须的";
   }
 
   if (validator.isEmpty(data.status)) {
