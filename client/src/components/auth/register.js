@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Form, Input, Tooltip, Icon, Checkbox, Button, Layout } from "antd";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const FormItem = Form.Item;
 const { Content } = Layout;
@@ -15,6 +16,14 @@ class Register extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log("Received values of form: ", values);
+        if (values.agreement !== true) {
+          //需要弹一个提示 不同意协议的不准注册
+          return;
+        }
+        axios
+          .post("/api/users/register", values)
+          .then(res => console.log(res.data))
+          .catch(err => console.log("请求失败"));
       }
     });
   };
