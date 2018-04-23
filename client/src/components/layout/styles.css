@@ -5,3 +5,17 @@
   margin: 16px 28px 16px 0;
   float: left;
 }
+
+.ant-carousel .slick-slide {
+  text-align: center;
+  height: 360px;
+  line-height: 360px;
+  background: #364d79;
+  /* background-image: linear-gradient(135deg, #81ffef 10%, #f067b4 100%); */
+  background-image: linear-gradient(to top, #5ee7df 0%, #b490ca 100%);
+  overflow: hidden;
+}
+
+.ant-carousel .slick-slide h3 {
+  color: #fff;
+}

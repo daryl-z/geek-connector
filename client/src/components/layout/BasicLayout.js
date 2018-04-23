@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Layout, Menu, Breadcrumb, Icon } from "antd";
-
 import GlobalHeader from "./GlobalHeader";
+import IndexContent from "./IndexContent";
 import GlobalFooter from "./GlobalFooter";
 const { SubMenu } = Menu;
 const { Content, Sider } = Layout;
@@ -84,7 +84,7 @@ export default class BasicLayout extends Component {
                 </Menu>
               </Sider>
               <Content style={{ padding: "0 24px", minHeight: 280 }}>
-                Content
+                <IndexContent />
               </Content>
             </Layout>
           </Content>
