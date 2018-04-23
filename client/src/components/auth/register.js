@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 // import { connect } from "react-redux";
 
 class Register extends Component {
@@ -11,9 +11,4 @@ class Register extends Component {
     );
   }
 }
-
-const mapStateToProps = state => ({});
-
-const mapDispatchToProps = {};
-
 export default Register;
