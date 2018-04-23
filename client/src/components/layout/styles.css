@@ -11,7 +11,7 @@
   height: 360px;
   line-height: 360px;
   background: #364d79;
-  background-image: linear-gradient(to right, #d7d2cc 0%, #304352 100%);
+  background-image: linear-gradient(to left, #d7d2cc 0%, #304352 100%);
   overflow: hidden;
 }
 
