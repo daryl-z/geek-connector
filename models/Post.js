@@ -14,6 +14,10 @@ const PostSchema = new Schema({
   name: {
     type: String
   },
+  catagory: {
+    type: String,
+    default: "其它"
+  },
   avatar: {
     type: String
   },
