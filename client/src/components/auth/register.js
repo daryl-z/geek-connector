@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Form, Input, Tooltip, Icon, Checkbox, Button, Layout } from "antd";
+import { Link } from "react-router-dom";
+
 const FormItem = Form.Item;
 const { Content } = Layout;
 // import PropTypes from "prop-types";
@@ -64,6 +66,9 @@ class Register extends Component {
     return (
       <Content style={{ padding: "0 50px" }}>
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <h1>用户注册</h1>
+          </div>
           <Form onSubmit={this.handleSubmit}>
             <FormItem
               {...formItemLayout}
@@ -142,6 +147,8 @@ class Register extends Component {
               <Button type="primary" htmlType="submit">
                 注册
               </Button>
+              &nbsp;&nbsp;&nbsp;&nbsp; 已有账号？
+              <Link to="/login">现在登录！</Link>
             </FormItem>
           </Form>
         </Layout>

@@ -59,15 +59,18 @@ class GlobalSider extends Component {
             key="sub4"
             title={
               <span>
-                <Icon type="laptop" />其他
+                <Icon type="laptop" />热门
               </span>
             }
           >
             <Menu.Item key="13">大数据</Menu.Item>
             <Menu.Item key="14">人工智能</Menu.Item>
             <Menu.Item key="15">机器学习</Menu.Item>
-            <Menu.Item key="16">深度学习</Menu.Item>
+            <Menu.Item key="16">计算机视觉</Menu.Item>
           </SubMenu>
+          <Menu.Item key="qita">
+            <Icon type="laptop" />其它
+          </Menu.Item>
         </Menu>
       </Sider>
     );
