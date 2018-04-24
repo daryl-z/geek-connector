@@ -10,7 +10,11 @@
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "keywords": ["react", "node", "express"],
+  "keywords": [
+    "react",
+    "node",
+    "express"
+  ],
   "author": "angelki",
   "license": "MIT",
   "dependencies": {
@@ -21,6 +25,7 @@
     "gravatar": "^1.6.0",
     "jsonwebtoken": "^8.2.1",
     "mongoose": "^5.0.14",
+    "nodemailer": "^4.6.4",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "validator": "^9.4.1"

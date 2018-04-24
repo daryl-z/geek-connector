@@ -25,8 +25,8 @@ module.exports = function validateReigsterInput(data) {
   if (validator.isEmpty(data.password)) {
     errors.password = "请输入密码";
   }
-  if (!validator.isLength(data.password, { min: 6, max: 18 })) {
-    errors.password = "密码必须在6到18个字符之间";
+  if (!validator.isLength(data.password, { min: 8, max: 16 })) {
+    errors.password = "密码必须在8到16个字符之间";
   }
   if (validator.isEmpty(data.password2)) {
     errors.password2 = "确认密码不能为空";

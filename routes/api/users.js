@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport");
+const nodemailer = require("nodemailer");
 
 // 登录注册输入验证
 const validateRegisterInput = require("../../validation/register");
@@ -43,6 +44,42 @@ router.post("/register", (req, res) => {
       avatar,
       password: req.body.password
     });
+    // 发送验证邮件
+    // const transporter = nodemailer.createTransport({
+    //   host: "smtp.163.com",
+    //   port: 465,
+    //   secureConnection: true,
+    //   auth: {
+    //     user: "angelks4@163.com",
+    //     pass: "Angelks4"
+    //   }
+    // });
+
+    // const messageOption = {
+    //   from: "angelks4@163.com", // sender address
+    //   to: "563017963@qq.com", // list of receivers
+    //   subject: "测试邮件", // Subject line
+    //   text: "Nodejs之邮件发送", // plaintext body
+    //   html:
+    //     "<h2>欢迎关注我的GitHub，一起学习Nodejs。https://github.com/Angelki</h2>"
+    // };
+
+    // transporter.sendMail(messageOption, function(error, info) {
+    //   if (!error) {
+    //     return res.json({ message: "邮件发送成功，请注意查收！" });
+    //   } else {
+    //     console.log(error);
+    //     return res.json({ message: "邮件发送失败，请稍后重试！" });
+    //   }
+    // });
+    // // verify connection configuration
+    // transporter.verify(function(error, success) {
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log("Server is ready to take our messages");
+    //   }
+    // });
 
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(newUser.password, salt, (err, hash) => {
