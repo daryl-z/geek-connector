@@ -44,43 +44,32 @@ router.post("/register", (req, res) => {
       avatar,
       password: req.body.password
     });
-    // 发送验证邮件
-    // const transporter = nodemailer.createTransport({
-    //   host: "smtp.163.com",
-    //   port: 465,
-    //   secureConnection: true,
-    //   auth: {
-    //     user: "angelks4@163.com",
-    //     pass: "Angelks4"
-    //   }
-    // });
+    // 发送验证邮件;
+    const transporter = nodemailer.createTransport({
+      host: "smtp.qq.com",
+      port: 465,
+      auth: {
+        user: "563017963@qq.com",
+        pass: "hsgzygtxqbzsbdfh"
+      }
+    });
 
-    // const messageOption = {
-    //   from: "angelks4@163.com", // sender address
-    //   to: "563017963@qq.com", // list of receivers
-    //   subject: "测试邮件", // Subject line
-    //   text: "Nodejs之邮件发送", // plaintext body
-    //   html:
-    //     "<h2>欢迎关注我的GitHub，一起学习Nodejs。https://github.com/Angelki</h2>"
-    // };
+    const messageOption = {
+      from: "devPlayer论坛 563017963@qq.com", // sender address
+      to: newUser.email, // list of receivers
+      subject: "注册成功！请验证您的邮箱。", // Subject line
+      text: "注册成功！请验证您的邮箱。", //
+      html: `<h1>您收到这封邮件，是由于在 Dev Player 进行了新用户注册，或用户修改 Email 使用了这个邮箱地址。如果您并没有访问过该网站，或没有进行上述操作，请忽略这封邮件。您不需要退订或进行其他进一步的操作。注册成功，点击下方链接，验证邮箱：</h1>`
+    };
 
-    // transporter.sendMail(messageOption, function(error, info) {
-    //   if (!error) {
-    //     return res.json({ message: "邮件发送成功，请注意查收！" });
-    //   } else {
-    //     console.log(error);
-    //     return res.json({ message: "邮件发送失败，请稍后重试！" });
-    //   }
-    // });
-    // // verify connection configuration
-    // transporter.verify(function(error, success) {
-    //   if (error) {
-    //     console.log(error);
-    //   } else {
-    //     console.log("Server is ready to take our messages");
-    //   }
-    // });
-
+    transporter.sendMail(messageOption, function(error, info) {
+      if (!error) {
+        return res.json({ message: "邮件发送成功，请注意查收！" });
+      } else {
+        console.log(error);
+        return res.json({ message: "邮件发送失败，请稍后重试！" });
+      }
+    });
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(newUser.password, salt, (err, hash) => {
         if (err) {
@@ -95,6 +84,22 @@ router.post("/register", (req, res) => {
     });
   });
 });
+
+// router.get("/verify", (req, res) => {
+//   console.log(req.protocol + ":/" + req.get("host"));
+//   if (req.protocol + "://" + req.get("host") == "http://" + host) {
+//     console.log("Domain is matched. Information is from Authentic email");
+//     if (req.query.id === rand) {
+//       console.log("email is verified");
+//       res.end("<h1>Email " + mailOptions.to + " is been Successfully verified");
+//     } else {
+//       console.log("email is not verified");
+//       res.end("<h1>Bad Request</h1>");
+//     }
+//   } else {
+//     res.end("<h1>Request is from unknown source");
+//   }
+// });
 
 // @route GET api/users/login
 // @desc Login User /Returning JWT Token
