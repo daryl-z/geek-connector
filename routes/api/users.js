@@ -44,32 +44,33 @@ router.post("/register", (req, res) => {
       avatar,
       password: req.body.password
     });
-    // 发送验证邮件;
-    const transporter = nodemailer.createTransport({
-      host: "smtp.qq.com",
-      port: 465,
-      auth: {
-        user: "563017963@qq.com",
-        pass: "hsgzygtxqbzsbdfh"
-      }
-    });
 
-    const messageOption = {
-      from: "devPlayer论坛 563017963@qq.com", // sender address
-      to: newUser.email, // list of receivers
-      subject: "注册成功！请验证您的邮箱。", // Subject line
-      text: "注册成功！请验证您的邮箱。", //
-      html: `<h1>您收到这封邮件，是由于在 Dev Player 进行了新用户注册，或用户修改 Email 使用了这个邮箱地址。如果您并没有访问过该网站，或没有进行上述操作，请忽略这封邮件。您不需要退订或进行其他进一步的操作。注册成功，点击下方链接，验证邮箱：</h1>`
-    };
+    // // 发送验证邮件
+    // const transporter = nodemailer.createTransport({
+    //   host: "smtp.qq.com",
+    //   port: 465,
+    //   auth: {
+    //     user: "563017963@qq.com",
+    //     pass: "hsgzygtxqbzsbdfh"
+    //   }
+    // });
 
-    transporter.sendMail(messageOption, function(error, info) {
-      if (!error) {
-        return res.json({ message: "邮件发送成功，请注意查收！" });
-      } else {
-        console.log(error);
-        return res.json({ message: "邮件发送失败，请稍后重试！" });
-      }
-    });
+    // const messageOption = {
+    //   from: "devPlayer论坛 563017963@qq.com", // sender address
+    //   to: newUser.email, // list of receivers
+    //   subject: "注册成功！请验证您的邮箱。", // Subject line
+    //   text: "注册成功！请验证您的邮箱。", //
+    //   html: `<h1>您收到这封邮件，是由于在 Dev Player 进行了新用户注册，或用户修改 Email 使用了这个邮箱地址。如果您并没有访问过该网站，或没有进行上述操作，请忽略这封邮件。您不需要退订或进行其他进一步的操作。注册成功，点击下方链接，验证邮箱：</h1>`
+    // };
+
+    // transporter.sendMail(messageOption, function(error, info) {
+    //   if (!error) {
+    //     return res.json({ message: "邮件发送成功，请注意查收！" });
+    //   } else {
+    //     console.log(error);
+    //     return res.json({ message: "邮件发送失败，请稍后重试！" });
+    //   }
+    // });
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(newUser.password, salt, (err, hash) => {
         if (err) {

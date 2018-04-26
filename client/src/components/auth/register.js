@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import { Form, Input, Tooltip, Icon, Checkbox, Button, Layout } from "antd";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { registerUser } from "../../actions/authActions";
 
 const FormItem = Form.Item;
 const { Content } = Layout;
-// import PropTypes from "prop-types";
-// import { connect } from "react-redux";
+
 class Register extends Component {
   state = {
     confirmDirty: false,
@@ -26,18 +28,20 @@ class Register extends Component {
           //需要弹一个提示 不同意协议的不准注册
           return;
         }
-        axios
-          .post("/api/users/register", values)
-          .then(res => console.log(res.data))
-          .catch(err => {
-            this.setState(
-              {
-                emailHelp: "该邮箱已注册",
-                emailValidateStatus: "error"
-              },
-              console.log(err.response.data)
-            );
-          });
+        // actionCreator mapDispatchToProps
+        this.props.registerUser(values);
+        // axios
+        //   .post("/api/users/register", values)
+        //   .then(res => console.log(res.data))
+        //   .catch(err => {
+        //     this.setState(
+        //       {
+        //         emailHelp: "该邮箱已注册",
+        //         emailValidateStatus: "error"
+        //       },
+        //       console.log(err.response.data)
+        //     );
+        //   });
       }
     });
   };
@@ -64,6 +68,8 @@ class Register extends Component {
   render() {
     const { emailHelp, emailValidateStatus } = this.state;
     const { getFieldDecorator } = this.props.form;
+
+    const { user } = this.props.auth;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -92,6 +98,7 @@ class Register extends Component {
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <h1>用户注册</h1>
+            {user ? user.name : null}
           </div>
           <Form onSubmit={this.handleSubmit}>
             <FormItem
@@ -200,4 +207,15 @@ class Register extends Component {
     );
   }
 }
-export default Form.create()(Register);
+
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+export default connect(mapStateToProps, { registerUser })(
+  Form.create()(Register)
+);
