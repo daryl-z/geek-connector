@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Spin, Layout } from "antd";
+import { Spin, Layout, Button, Alert, Icon, Col, Row } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -15,8 +15,17 @@ class Dashboard extends Component {
     const { user } = this.props.auth;
     const { profile, loading } = this.props.profile;
     let dashboardContent;
+
     if (profile === null || loading) {
-      dashboardContent = <Spin tip="正在加载..." />;
+      dashboardContent = (
+        <Row>
+          <Col span={11} />
+          <Col span={2}>
+            <Spin tip="正在加载..." />
+          </Col>
+          <Col span={11} />
+        </Row>
+      );
     } else {
       // dashboardContent = <h1>Hello</h1>;
       // 用户是否有简介
@@ -24,7 +33,28 @@ class Dashboard extends Component {
         dashboardContent = <h4>DIsplay profile</h4>;
       } else {
         // 用户一登陆 但是没简介
-        <Link to="create-profile">创建个人简介</Link>;
+        dashboardContent = (
+          <div>
+            <Alert
+              message="您还没有创建简介"
+              description="您可以点击下面的按钮创建一个自己的简介，方便让更多人认识你。"
+              type="info"
+              showIcon
+              style={{ margin: "42px 24px 50px" }}
+            />
+            <Row>
+              <Col span={11} />
+              <Col span={2}>
+                <Link to="create-profile">
+                  <Button type="primary" size="large">
+                    创建个人简介
+                  </Button>
+                </Link>
+              </Col>
+              <Col span={11} />
+            </Row>
+          </div>
+        );
       }
     }
     return (
@@ -33,10 +63,7 @@ class Dashboard extends Component {
           <div style={{ display: "flex", justifyContent: "center" }}>
             <h1>个人中心</h1>
           </div>
-          <div>
-            <h1>Dashboard</h1>
-            {dashboardContent}
-          </div>
+          <div>{dashboardContent}</div>
         </Layout>
       </Content>
     );

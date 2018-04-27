@@ -53,7 +53,7 @@ class Login extends Component {
   renderMessage = content => {
     return (
       <Alert
-        style={{ marginBottom: 24 }}
+        style={{ margin: "42px 24px 50px" }}
         message={content}
         type="error"
         showIcon
