@@ -8,8 +8,6 @@ import { loginUser } from "../../actions/authActions";
 const FormItem = Form.Item;
 const { Content } = Layout;
 
-// import PropTypes from "prop-types";
-
 class Login extends Component {
   constructor(props) {
     super(props);
