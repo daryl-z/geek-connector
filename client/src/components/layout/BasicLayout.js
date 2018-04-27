@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout } from "antd";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "../../utils/setAuthToken";
@@ -15,6 +15,7 @@ import GlobalFooter from "./GlobalFooter";
 import Login from "../auth/login";
 import Register from "../auth/register";
 import Dashboard from "../dashboard/dashboard";
+import PrivateRoute from "../common/PrivateRoute";
 
 // check for token
 if (localStorage.jwtToken) {
@@ -44,7 +45,9 @@ export default class BasicLayout extends Component {
               <div>
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
-                <Route exact path="/dashboard" component={Dashboard} />
+                <Switch>
+                  <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                </Switch>
               </div>
               <GlobalFooter />
             </Layout>

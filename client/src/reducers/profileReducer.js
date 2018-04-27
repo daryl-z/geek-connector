@@ -21,7 +21,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         profile: action.payload,
-        loading: true
+        loading: false
       };
     case CLEAR_CURRENT_PROFILE:
       return {

@@ -31,19 +31,30 @@ class GlobalHeader extends Component {
 
     const authLinks = (
       <Menu.Item key="3" style={{ float: "right" }}>
-        <Link to="/login" onClick={this.onLogoutClick}>
+        <Link
+          to="/login"
+          onClick={this.onLogoutClick}
+          style={{ float: "right" }}
+        >
+          &nbsp;&nbsp;注销
+        </Link>
+      </Menu.Item>
+    );
+    const userAvatar = (
+      <Menu.Item key="avatar" style={{ float: "right" }}>
+        <Link to="/dashboard">
           <Avatar
             src={user.avatar}
             size="small"
             icon="user"
             alt={user.name}
             style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
-            title="用邮箱绑定Gavatar才能显示头像"
+            title="个人中心"
           />
-          &nbsp;&nbsp;注销
         </Link>
       </Menu.Item>
     );
+
     return (
       <Header className="header">
         <Link to="/" className="logo">
@@ -64,7 +75,9 @@ class GlobalHeader extends Component {
             {" "}
             <Link to="/profiles">开发者们</Link>
           </Menu.Item>
-          {isAuthenticated ? authLinks : [registerLink, loginLink]}
+          {isAuthenticated
+            ? [authLinks, userAvatar]
+            : [registerLink, loginLink]}
         </Menu>
       </Header>
     );
