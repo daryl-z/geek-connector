@@ -48,3 +48,13 @@ export const setCurrentUser = decoded => {
     payload: decoded
   };
 };
+
+// logout
+export const logoutUser = () => dispatch => {
+  //移除token
+  localStorage.removeItem("jwtToken");
+  //移除auth header
+  setAuthToken(false);
+  //设置currentuser为{} isAuthenticated false  回到初始state
+  dispatch(setCurrentUser({}));
+};

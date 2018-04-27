@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Form, Input, Icon, Checkbox, Button, Layout, Alert } from "antd";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { loginUser } from "../../actions/authActions";
@@ -15,6 +15,13 @@ class Login extends Component {
       alertVisible: false,
       errors: {}
     };
+  }
+
+  //如果用户已登录则不能访问登录页面
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/");
+    }
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
