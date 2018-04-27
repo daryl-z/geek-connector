@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import { Form, Input, Icon, Checkbox, Button, Layout } from "antd";
-import { Link } from "react-router-dom";
+import { Form, Input, Icon, Checkbox, Button, Layout, Alert } from "antd";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { loginUser } from "../../actions/authActions";
 
 const FormItem = Form.Item;
 const { Content } = Layout;
@@ -8,17 +11,54 @@ const { Content } = Layout;
 // import PropTypes from "prop-types";
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      alertVisible: false,
+      errors: {}
+    };
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/");
+    }
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors }, () => {
+        if (this.state.errors) {
+          if (
+            this.state.errors.email !== undefined ||
+            this.state.errors.password !== undefined
+          )
+            this.setState({ alertVisible: true });
+        }
+      });
+    }
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log("Received values of form: ", values);
+        // console.log("Received values of form: ", values);
+        this.props.loginUser(values);
       }
     });
   };
+
+  renderMessage = content => {
+    return (
+      <Alert
+        style={{ marginBottom: 24 }}
+        message={content}
+        type="error"
+        showIcon
+      />
+    );
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
-
+    const { errors, alertVisible } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -42,7 +82,7 @@ class Login extends Component {
         }
       }
     };
-
+    console.log(errors);
     return (
       <Content style={{ padding: "0 50px" }}>
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
@@ -50,6 +90,14 @@ class Login extends Component {
             <h1>用户登录</h1>
           </div>
           <Form onSubmit={this.handleSubmit} className="login-form">
+            <FormItem>
+              {alertVisible && errors.email && this.renderMessage(errors.email)}
+            </FormItem>
+            <FormItem>
+              {alertVisible &&
+                errors.password &&
+                this.renderMessage(errors.password)}
+            </FormItem>
             <FormItem {...formItemLayout} label="邮箱">
               {getFieldDecorator("email", {
                 rules: [{ required: true, message: "请输入您的邮箱！" }]
@@ -107,4 +155,15 @@ class Login extends Component {
   }
 }
 
-export default Form.create()(Login);
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(mapStateProps, { loginUser })(Form.create()(Login));

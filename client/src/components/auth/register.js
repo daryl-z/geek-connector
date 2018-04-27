@@ -39,6 +39,17 @@ class Register extends Component {
     }
   }
 
+  renderMessage = content => {
+    return (
+      <Alert
+        style={{ marginBottom: 24 }}
+        message={content}
+        type="error"
+        showIcon
+      />
+    );
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -108,9 +119,7 @@ class Register extends Component {
           </div>
           <Form onSubmit={this.handleSubmit}>
             <FormItem>
-              {alertVisible && (
-                <Alert message={this.state.errors.email} type="error" />
-              )}
+              {alertVisible && this.renderMessage("该邮箱已注册")}
             </FormItem>
             <FormItem
               {...formItemLayout}
