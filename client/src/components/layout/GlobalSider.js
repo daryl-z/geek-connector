@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Layout, Menu, Icon } from "antd";
+import { Link } from "react-router-dom";
+
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 // import PropTypes from 'prop-types'
@@ -22,7 +24,9 @@ class GlobalSider extends Component {
               </span>
             }
           >
-            <Menu.Item key="5">个人中心</Menu.Item>
+            <Menu.Item key="5">
+              <Link to="/dashboard">个人中心</Link>
+            </Menu.Item>
             <Menu.Item key="6">帖子管理</Menu.Item>
             <Menu.Item key="7">教育信息</Menu.Item>
             <Menu.Item key="8">工作经历</Menu.Item>
