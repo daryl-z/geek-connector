@@ -16,6 +16,7 @@ import Login from "../auth/login";
 import Register from "../auth/register";
 import Dashboard from "../dashboard/dashboard";
 import PrivateRoute from "../common/PrivateRoute";
+import CreateProfile from "../create-profile/CreateProfile";
 
 // check for token
 if (localStorage.jwtToken) {
@@ -47,6 +48,13 @@ export default class BasicLayout extends Component {
                 <Route exact path="/login" component={Login} />
                 <Switch>
                   <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                </Switch>
+                <Switch>
+                  <PrivateRoute
+                    exact
+                    path="/create-profile"
+                    component={CreateProfile}
+                  />
                 </Switch>
               </div>
               <GlobalFooter />
