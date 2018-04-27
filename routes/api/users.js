@@ -31,7 +31,7 @@ router.post("/register", (req, res) => {
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       errors.email = "该邮箱已注册";
-      return res.status(400).json({ errors });
+      return res.status(400).json(errors);
     }
     const avatar = gravatar.url(req.body.email, {
       s: "200", // Size

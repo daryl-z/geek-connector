@@ -1,7 +1,16 @@
 import React, { Component } from "react";
-import { Form, Input, Tooltip, Icon, Checkbox, Button, Layout } from "antd";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import {
+  Form,
+  Input,
+  Tooltip,
+  Icon,
+  Checkbox,
+  Button,
+  Layout,
+  Alert
+} from "antd";
+// import axios from "axios";
+import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { registerUser } from "../../actions/authActions";
@@ -10,38 +19,38 @@ const FormItem = Form.Item;
 const { Content } = Layout;
 
 class Register extends Component {
-  state = {
-    confirmDirty: false,
-    emailValidateStatus: "",
-    emailHelp: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      confirmDirty: false,
+      errors: {},
+      alertVisible: false
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors }, () => {
+        if (this.state.errors) {
+          if (this.state.errors.email !== undefined)
+            this.setState({ alertVisible: true });
+        }
+      });
+    }
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      this.setState({
-        emailHelp: "",
-        emailValidateStatus: ""
-      });
       if (!err) {
-        console.log("Received values of form: ", values);
+        // console.log("Received values of form: ", values);
         if (values.agreement !== true) {
           //需要弹一个提示 不同意协议的不准注册
           return;
         }
         // actionCreator mapDispatchToProps
-        this.props.registerUser(values);
-        // axios
-        //   .post("/api/users/register", values)
-        //   .then(res => console.log(res.data))
-        //   .catch(err => {
-        //     this.setState(
-        //       {
-        //         emailHelp: "该邮箱已注册",
-        //         emailValidateStatus: "error"
-        //       },
-        //       console.log(err.response.data)
-        //     );
-        //   });
+        this.props.registerUser(values, this.props.history);
+        // console.log(this.state.errors);
       }
     });
   };
@@ -66,10 +75,8 @@ class Register extends Component {
   };
 
   render() {
-    const { emailHelp, emailValidateStatus } = this.state;
+    const { alertVisible } = this.state;
     const { getFieldDecorator } = this.props.form;
-
-    const { user } = this.props.auth;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -98,9 +105,13 @@ class Register extends Component {
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <h1>用户注册</h1>
-            {user ? user.name : null}
           </div>
           <Form onSubmit={this.handleSubmit}>
+            <FormItem>
+              {alertVisible && (
+                <Alert message={this.state.errors.email} type="error" />
+              )}
+            </FormItem>
             <FormItem
               {...formItemLayout}
               label={
@@ -128,17 +139,15 @@ class Register extends Component {
               })(<Input />)}
             </FormItem>
 
-            <FormItem
-              {...formItemLayout}
-              label="邮箱"
-              validateStatus={emailValidateStatus}
-              help={emailHelp}
-            >
+            <FormItem {...formItemLayout} label="邮箱">
               {getFieldDecorator("email", {
                 rules: [
                   {
                     type: "email",
-                    message: "当前输入不合法！"
+                    message: "当前邮箱不合法！"
+                  },
+                  {
+                    validator: this.isRegistered
                   },
                   {
                     required: true,
@@ -158,11 +167,6 @@ class Register extends Component {
                   {
                     validator: this.validateToNextPassword
                   },
-                  // {
-                  //   min: 6,
-                  //   max: 18,
-                  //   message: "密码必须在6到18个字符之间"
-                  // },
                   {
                     pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/,
                     message:
@@ -210,12 +214,14 @@ class Register extends Component {
 
 Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
-  auth: PropTypes.object
+  auth: PropTypes.object,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  errors: state.errors
 });
 export default connect(mapStateToProps, { registerUser })(
-  Form.create()(Register)
+  withRouter(Form.create()(Register))
 );
