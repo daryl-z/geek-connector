@@ -38,7 +38,7 @@ class Register extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors }, () => {
         if (this.state.errors) {
-          if (this.state.errors.email !== undefined)
+          if (this.state.errors.regiEmail !== undefined)
             this.setState({ alertVisible: true });
         }
       });

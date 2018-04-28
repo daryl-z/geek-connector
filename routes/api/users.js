@@ -30,7 +30,7 @@ router.post("/register", (req, res) => {
 
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      errors.email = "该邮箱已注册";
+      errors.regiEmail = "该邮箱已注册";
       return res.status(400).json(errors);
     }
     const avatar = gravatar.url(req.body.email, {
@@ -119,7 +119,7 @@ router.post("/login", (req, res) => {
   User.findOne({ email }).then(user => {
     // 如果用户不存在
     if (!user) {
-      errors.email = "用户不存在";
+      errors.loginEmail = "用户不存在";
       return res.status(404).json(errors);
     }
     // 验证密码
@@ -141,7 +141,7 @@ router.post("/login", (req, res) => {
           }
         );
       } else {
-        errors.password = "密码不正确";
+        errors.loginPassword = "密码不正确";
         return res.status(400).json(errors);
       }
     });

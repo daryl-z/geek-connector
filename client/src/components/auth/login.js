@@ -12,7 +12,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      alertVisible: false,
+      loginAlertVisible: false,
       errors: {}
     };
   }
@@ -31,10 +31,10 @@ class Login extends Component {
       this.setState({ errors: nextProps.errors }, () => {
         if (this.state.errors) {
           if (
-            this.state.errors.email !== undefined ||
-            this.state.errors.password !== undefined
+            this.state.errors.loginEmail !== undefined ||
+            this.state.errors.loginPassword !== undefined
           )
-            this.setState({ alertVisible: true });
+            this.setState({ loginAlertVisible: true });
         }
       });
     }
@@ -63,7 +63,7 @@ class Login extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { errors, alertVisible } = this.state;
+    const { errors, loginAlertVisible } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -87,7 +87,7 @@ class Login extends Component {
         }
       }
     };
-    console.log(errors);
+    // console.log(errors);
     return (
       <Content style={{ padding: "0 50px" }}>
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
@@ -96,12 +96,14 @@ class Login extends Component {
           </div>
           <Form onSubmit={this.handleSubmit} className="login-form">
             <FormItem>
-              {alertVisible && errors.email && this.renderMessage(errors.email)}
+              {loginAlertVisible &&
+                errors.loginEmail &&
+                this.renderMessage(errors.loginEmail)}
             </FormItem>
             <FormItem>
-              {alertVisible &&
-                errors.password &&
-                this.renderMessage(errors.password)}
+              {loginAlertVisible &&
+                errors.loginPassword &&
+                this.renderMessage(errors.loginPassword)}
             </FormItem>
             <FormItem {...formItemLayout} label="邮箱">
               {getFieldDecorator("email", {
