@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { createProfile } from "../../actions/profileActions";
 import PropTypes from "prop-types";
+import options from "../common/cascader-address-options";
+
 import {
   Form,
   Input,
@@ -12,7 +14,6 @@ import {
   Select,
   Row,
   Col,
-  Checkbox,
   Button,
   AutoComplete,
   Layout
@@ -24,57 +25,6 @@ const AutoCompleteOption = AutoComplete.Option;
 const { TextArea } = Input;
 const { Content } = Layout;
 
-const residences = [
-  {
-    value: "anhui",
-    label: "安徽",
-    children: [
-      {
-        value: "maanshan",
-        label: "马鞍山",
-        children: [
-          {
-            value: "ahut",
-            label: "安徽工业大学"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    value: "zhejiang",
-    label: "浙江",
-    children: [
-      {
-        value: "hangzhou",
-        label: "杭州",
-        children: [
-          {
-            value: "xihu",
-            label: "西湖"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    value: "上海",
-    label: "上海",
-    children: [
-      {
-        value: "changningqu",
-        label: "长宁区",
-        children: [
-          {
-            value: "hongqiao",
-            label: "虹桥"
-          }
-        ]
-      }
-    ]
-  }
-];
-
 class CreateProfile extends Component {
   state = {
     confirmDirty: false,
@@ -85,6 +35,7 @@ class CreateProfile extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log("Received values of form: ", values);
+        this.props.createProfile(values, this.props.history);
       }
     });
   };
@@ -237,17 +188,16 @@ class CreateProfile extends Component {
             <FormItem {...formItemLayout} label="居住地">
               <Row gutter={8}>
                 <Col span={12}>
-                  {" "}
-                  {getFieldDecorator("residence", {
-                    initialValue: ["anhui", "maanshan", "ahut"],
+                  {getFieldDecorator("location", {
+                    initialValue: ["34", "3405", "340504"],
                     rules: [
                       {
                         type: "array",
                         required: true,
-                        message: "Please select your habitual residence!"
+                        message: "请选择您的居住地"
                       }
                     ]
-                  })(<Cascader options={residences} />)}
+                  })(<Cascader options={options} />)}
                 </Col>
                 <Col span={12} />
               </Row>
@@ -413,5 +363,5 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { createProfile })(
-  Form.create()(CreateProfile)
+  withRouter(Form.create()(CreateProfile))
 );

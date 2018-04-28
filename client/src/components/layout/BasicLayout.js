@@ -12,9 +12,9 @@ import store from "../../store";
 import GlobalHeader from "./GlobalHeader";
 import IndexContent from "./IndexContent";
 import GlobalFooter from "./GlobalFooter";
-import Login from "../auth/login";
-import Register from "../auth/register";
-import Dashboard from "../dashboard/dashboard";
+import Login from "../auth/Login";
+import Register from "../auth/Register";
+import Dashboard from "../dashboard/Dashboard";
 import PrivateRoute from "../common/PrivateRoute";
 import CreateProfile from "../create-profile/CreateProfile";
 
