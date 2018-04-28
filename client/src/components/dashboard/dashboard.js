@@ -40,15 +40,22 @@ class Dashboard extends Component {
       if (Object.keys(profile).length > 0) {
         dashboardContent = (
           <div>
-            <p>
-              欢迎 <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
-            </p>
-            <Row>
-              <Col span={9} />
-              <Col span={6}>
-                <ProfileOperation />
+            <Row
+              type="flex"
+              justify="end"
+              align="bottom"
+              style={{ margin: "0 20px" }}
+            />
+            <Row
+              type="flex"
+              justify="space-between"
+              align="bottom"
+              style={{ margin: "0 20px" }}
+            >
+              <Col>
+                欢迎,<Link to={`/profile/${profile.handle}`}>{user.name}</Link>用户!
               </Col>
-              <Col spn={9} />
+              <ProfileOperation />
             </Row>
             <Experience experience={profile.experience} />
             <Education education={profile.education} />
