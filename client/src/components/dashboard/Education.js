@@ -3,8 +3,12 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { deleteEducation } from "../../actions/profileActions";
 import { Divider, Table, Icon } from "antd";
+import Moment from "react-moment";
 
 class Education extends Component {
+  onDeleteClick = id => {
+    this.props.deleteEducation(id);
+  };
   render() {
     const columns = [
       {
@@ -22,6 +26,16 @@ class Education extends Component {
         title: "起止日期",
         dataIndex: "years",
         key: "years"
+        // render: text => (
+        //   <div>
+        //     <Moment format="YYYY/MM/DD">{edu.from}</Moment> -
+        //     {edu.to === null ? (
+        //       " Now"
+        //     ) : (
+        //       <Moment format="YYYY/MM/DD">{edu.to}</Moment>
+        //     )}
+        //   </div>
+        // )
       },
       {
         title: "操作",
