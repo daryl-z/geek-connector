@@ -92,21 +92,7 @@ class CreateProfile extends Component {
     const value = e.target.value;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   };
-  compareToFirstPassword = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value && value !== form.getFieldValue("password")) {
-      callback("Two passwords that you enter is inconsistent!");
-    } else {
-      callback();
-    }
-  };
-  validateToNextPassword = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value && this.state.confirmDirty) {
-      form.validateFields(["confirm"], { force: true });
-    }
-    callback();
-  };
+
   handleWebsiteChange = value => {
     let autoCompleteResult;
     if (!value) {
@@ -178,11 +164,13 @@ class CreateProfile extends Component {
                     rules: [
                       {
                         required: true,
-                        message: "请输入简历的名称!",
+                        message: "请输入简介的名称!",
                         whitespace: true
                       }
                     ]
-                  })(<Input />)}
+                  })(
+                    <Input placeholder="简介的唯一标识,可通过url访问该简介" />
+                  )}
                 </Col>
                 <Col span={12} />
               </Row>
@@ -200,11 +188,13 @@ class CreateProfile extends Component {
                     ]
                   })(
                     <Select
-                      defaultValue="lucy"
                       style={{ width: "100%" }}
                       onChange={this.handleChange}
+                      placeholder="请选择工作状态"
                     >
-                      <Option value="developer">开发者</Option>
+                      <Option initialValue value="developer">
+                        开发者
+                      </Option>
                       <Option value="junior">初级开发者</Option>
                       <Option value="senior">高级开发者</Option>
                       <Option value="teacher">教师</Option>
@@ -221,7 +211,7 @@ class CreateProfile extends Component {
                 <Col span={12}>
                   {getFieldDecorator("company", {
                     rules: []
-                  })(<Input />)}
+                  })(<Input placeholder="请输入公司名称" />)}
                 </Col>
                 <Col span={12} />
               </Row>
@@ -273,7 +263,9 @@ class CreateProfile extends Component {
                         whitespace: true
                       }
                     ]
-                  })(<Input />)}
+                  })(
+                    <Input placeholder="请输入技能名称，请用逗号隔开etc:CSS,JS,HTML" />
+                  )}
                 </Col>
                 <Col span={12} />
               </Row>
@@ -283,7 +275,7 @@ class CreateProfile extends Component {
               label={
                 <span>
                   GitHub用户名&nbsp;
-                  <Tooltip title="GitHub URL的最后一个路径?">
+                  <Tooltip title="GitHub URL的最后一个路径">
                     <Icon type="question-circle-o" />
                   </Tooltip>
                 </span>
@@ -293,7 +285,12 @@ class CreateProfile extends Component {
                 <Col span={12}>
                   {getFieldDecorator("githubname", {
                     rules: []
-                  })(<Input style={{ width: "100%" }} />)}
+                  })(
+                    <Input
+                      style={{ width: "100%" }}
+                      placeholder="GitHub 用户名"
+                    />
+                  )}
                 </Col>
                 <Col span={12} />
               </Row>
@@ -322,6 +319,7 @@ class CreateProfile extends Component {
                     <Input
                       addonBefore={<Icon type="weibo" />}
                       style={{ width: "100%" }}
+                      placeholder="微博"
                     />
                   )}
                 </Col>
@@ -335,6 +333,7 @@ class CreateProfile extends Component {
                     rules: []
                   })(
                     <Input
+                      placeholder="微信"
                       addonBefore={<Icon type="wechat" />}
                       style={{ width: "100%" }}
                     />
@@ -352,6 +351,7 @@ class CreateProfile extends Component {
                     <Input
                       addonBefore={<Icon type="youtube" />}
                       style={{ width: "100%" }}
+                      placeholder="bilibili"
                     />
                   )}
                 </Col>
@@ -367,6 +367,7 @@ class CreateProfile extends Component {
                     <Input
                       addonBefore={<Icon type="codepen-circle" />}
                       style={{ width: "100%" }}
+                      placeholder="Stack Overflow"
                     />
                   )}
                 </Col>
@@ -382,6 +383,7 @@ class CreateProfile extends Component {
                     <Input
                       addonBefore={<Icon type="code" />}
                       style={{ width: "100%" }}
+                      placeholder="LeetCode"
                     />
                   )}
                 </Col>
