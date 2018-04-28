@@ -5,12 +5,20 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { getCurrentProfile } from "../../actions/profileActions";
 
+import ProfileOperation from "./ProfileOperation";
+import Experience from "./Experience";
+import Education from "./Education";
+
 const { Content } = Layout;
 
 class Dashboard extends Component {
   componentDidMount() {
     this.props.getCurrentProfile();
   }
+  onDeleteClick = e => {
+    this.props.deleteAccount();
+  };
+
   render() {
     const { user } = this.props.auth;
     const { profile, loading } = this.props.profile;
@@ -30,7 +38,24 @@ class Dashboard extends Component {
       // dashboardContent = <h1>Hello</h1>;
       // 用户是否有简介
       if (Object.keys(profile).length > 0) {
-        dashboardContent = <h4>DIsplay profile</h4>;
+        dashboardContent = (
+          <div>
+            <p>
+              欢迎 <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
+            </p>
+            <Row>
+              <Col span={9} />
+              <Col span={6}>
+                <ProfileOperation />
+              </Col>
+              <Col spn={9} />
+            </Row>
+            <Experience experience={profile.experience} />
+            <Education education={profile.education} />
+            <div style={{ marginBottom: "60px" }} />
+            <button onClick={this.onDeleteClick}>Delete My Account</button>
+          </div>
+        );
       } else {
         // 用户一登陆 但是没简介
         dashboardContent = (
