@@ -461,25 +461,5 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
-  withRouter(
-    Form
-      .create
-      //   {
-      //   onFieldsChange(props, changedFields) {
-      //     props.onChange(changedFields);
-      //   },
-      //   mapPropsToFields(props) {
-      //     return {
-      //       handle: Form.createFormField({
-      //         ...props.profile,
-      //         value: props.profile.handle
-      //       })
-      //     };
-      //   },
-      //   onValuesChange(_, values) {
-      //     console.log(values);
-      //   }
-      // }
-      ()(EditProfile)
-  )
+  withRouter(Form.create()(EditProfile))
 );
