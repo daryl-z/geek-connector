@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Spin, Layout, Button, Alert, Icon, Col, Row } from "antd";
+import { Spin, Layout, Button, Alert, Col, Row } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";

@@ -1,27 +1,31 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { addEducation } from "../../actions/profileActions";
+import {
+  Form,
+  Input,
+  Select,
+  Row,
+  Col,
+  Button,
+  Layout,
+  DatePicker
+} from "antd";
+
+const FormItem = Form.Item;
+const Option = Select.Option;
+const { TextArea } = Input;
+const { Content } = Layout;
+const RangePicker = DatePicker.RangePicker;
 
 class AddEducation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      school: "",
-      degree: "",
-      fieldofstudy: "",
-      from: "",
-      to: "",
-      current: false,
-      description: "",
-      errors: {},
       disabled: false
     };
-
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onCheck = this.onCheck.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,21 +34,21 @@ class AddEducation extends Component {
     }
   }
 
-  onSubmit(e) {
+  handleSubmit = e => {
     e.preventDefault();
-
-    const eduData = {
-      school: this.state.school,
-      degree: this.state.degree,
-      fieldofstudy: this.state.fieldofstudy,
-      from: this.state.from,
-      to: this.state.to,
-      current: this.state.current,
-      description: this.state.description
-    };
-
-    this.props.addEducation(eduData, this.props.history);
-  }
+    this.props.form.validateFieldsAndScroll((err, fieldsValue) => {
+      if (!err) {
+        const rangeValue = fieldsValue["range-picker"];
+        const values = {
+          ...fieldsValue,
+          from: rangeValue[0].format("YYYY-MM-DD"),
+          to: rangeValue[1].format("YYYY-MM-DD")
+        };
+        console.log("Received values of form: ", values);
+        this.props.addEducation(values, this.props.history);
+      }
+    });
+  };
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -57,10 +61,142 @@ class AddEducation extends Component {
     });
   }
 
+  handleChange = value => {
+    console.log(`selected ${value}`);
+  };
+
   render() {
     const { errors } = this.state;
 
-    return <div>添加教育信息</div>;
+    const { getFieldDecorator } = this.props.form;
+    const { autoCompleteResult } = this.state;
+
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 }
+      }
+    };
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0
+        },
+        sm: {
+          span: 16,
+          offset: 8
+        }
+      }
+    };
+
+    // 起止日期配置
+    const rangeConfig = {
+      rules: [{ type: "array", required: true, message: "请选择时间!" }]
+    };
+
+    return (
+      <Content style={{ padding: "0 50px" }}>
+        <Layout style={{ padding: "24px 0", background: "#fff" }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <h1>添加教育信息</h1>
+          </div>
+          <Form onSubmit={this.handleSubmit}>
+            <FormItem {...formItemLayout} label="学校名称">
+              <Row gutter={8}>
+                <Col span={12}>
+                  {getFieldDecorator("school", {
+                    rules: [
+                      {
+                        required: true,
+                        message: "请选择您的学校!",
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="请输入学校名称" />)}
+                </Col>
+                <Col span={12} />
+              </Row>
+            </FormItem>
+            <FormItem {...formItemLayout} label="专业名称">
+              <Row gutter={8}>
+                <Col span={12}>
+                  {getFieldDecorator("fieldofstudy", {
+                    rules: [
+                      {
+                        required: true,
+                        message: "请输入您的专业名称!",
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="请输入专业名称" />)}
+                </Col>
+                <Col span={12} />
+              </Row>
+            </FormItem>
+
+            <FormItem {...formItemLayout} label="学位">
+              <Row gutter={8}>
+                <Col span={12}>
+                  {getFieldDecorator("degree", {
+                    rules: [
+                      {
+                        required: true,
+                        message: "请选择您的学位信息!"
+                      }
+                    ],
+                    initialValue: "学士"
+                  })(
+                    <Select
+                      style={{ width: "100%" }}
+                      onChange={this.handleChange}
+                      placeholder="请选择"
+                    >
+                      <Option value="chuzhong">初中</Option>
+                      <Option value="gaozhong">高中</Option>
+                      <Option value="daxue">学士</Option>
+                      <Option value="shuoshi">硕士</Option>
+                      <Option value="boshi">博士</Option>
+                      <Option value="other">其他</Option>
+                    </Select>
+                  )}
+                </Col>
+                <Col span={12} />
+              </Row>
+            </FormItem>
+            <FormItem {...formItemLayout} label="起止日期">
+              <Row gutter={8}>
+                <Col span={12}>
+                  {getFieldDecorator("range-picker", rangeConfig)(
+                    <RangePicker style={{ width: "100%" }} />
+                  )}
+                </Col>
+                <Col span={12} />
+              </Row>
+            </FormItem>
+            <FormItem {...formItemLayout} label="描述">
+              <Row gutter={8}>
+                <Col span={12}>
+                  {getFieldDecorator("description", {
+                    rules: []
+                  })(<TextArea placeholder="对这段经历简单的描述" />)}
+                </Col>
+                <Col span={12} />
+              </Row>
+            </FormItem>
+            <FormItem {...tailFormItemLayout}>
+              <Button type="primary" htmlType="submit">
+                提交
+              </Button>
+            </FormItem>
+          </Form>
+        </Layout>
+      </Content>
+    );
   }
 }
 
@@ -76,5 +212,5 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { addEducation })(
-  withRouter(AddEducation)
+  withRouter(Form.create()(AddEducation))
 );
