@@ -49,7 +49,7 @@ class AddExperience extends Component {
             to: rangeValue[1].format("YYYY-MM-DD")
           };
           console.log("Received values of form: ", values);
-          this.props.addEducation(values, this.props.history);
+          this.props.addExperience(values, this.props.history);
         } else if (this.state.current === true) {
           const rangeValue = fieldsValue["range-picker"];
           const values = {

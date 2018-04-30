@@ -34,11 +34,11 @@ class Experience extends Component {
         key: "years",
         render: (text, record, index) => (
           <div>
-            <Moment format="YYYY/MM/DD">{text.from}</Moment> -
-            {text.to === null ? (
-              " Now"
+            <Moment format="YYYY/MM/DD">{text[0]}</Moment> -
+            {text[1] === null ? (
+              " 至今"
             ) : (
-              <Moment format="YYYY/MM/DD">{text.to}</Moment>
+              <Moment format="YYYY/MM/DD">{text[1]}</Moment>
             )}
           </div>
         )
