@@ -35,7 +35,6 @@ class Dashboard extends Component {
         </Row>
       );
     } else {
-      // dashboardContent = <h1>Hello</h1>;
       // 用户是否有简介
       if (Object.keys(profile).length > 0) {
         dashboardContent = (
@@ -60,7 +59,13 @@ class Dashboard extends Component {
             <Experience experience={profile.experience} />
             <Education education={profile.education} />
             <div style={{ marginBottom: "60px" }} />
-            <button onClick={this.onDeleteClick}>Delete My Account</button>
+            <Button
+              type="danger"
+              style={{ margin: "20px 20px" }}
+              onClick={this.onDeleteClick}
+            >
+              删除我的账号
+            </Button>
           </div>
         );
       } else {
