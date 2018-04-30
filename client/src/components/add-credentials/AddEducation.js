@@ -11,7 +11,8 @@ import {
   Col,
   Button,
   Layout,
-  DatePicker
+  DatePicker,
+  Checkbox
 } from "antd";
 
 const FormItem = Form.Item;
@@ -24,7 +25,8 @@ class AddEducation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: false
+      current: false,
+      errors: {}
     };
   }
 
@@ -38,39 +40,44 @@ class AddEducation extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, fieldsValue) => {
       if (!err) {
-        const rangeValue = fieldsValue["range-picker"];
-        const values = {
-          ...fieldsValue,
-          from: rangeValue[0].format("YYYY-MM-DD"),
-          to: rangeValue[1].format("YYYY-MM-DD")
-        };
-        console.log("Received values of form: ", values);
-        this.props.addEducation(values, this.props.history);
+        if (this.state.current === false) {
+          const rangeValue = fieldsValue["range-picker"];
+          const values = {
+            ...fieldsValue,
+            from: rangeValue[0].format("YYYY-MM-DD"),
+            to: rangeValue[1].format("YYYY-MM-DD")
+          };
+          console.log("Received values of form: ", values);
+          this.props.addEducation(values, this.props.history);
+        } else if (this.state.current === true) {
+          const rangeValue = fieldsValue["range-picker"];
+          const values = {
+            ...fieldsValue,
+            from: rangeValue[0].format("YYYY-MM-DD"),
+            to: ""
+          };
+          console.log("Received values of form: ", values);
+          this.props.addEducation(values, this.props.history);
+        }
       }
     });
   };
 
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
-  onCheck(e) {
-    this.setState({
-      disabled: !this.state.disabled,
-      current: !this.state.current
-    });
-  }
+  onCheck = e => {
+    this.setState(
+      {
+        current: !this.state.current
+      },
+      console.log(this.state.current)
+    );
+  };
 
   handleChange = value => {
     console.log(`selected ${value}`);
   };
 
   render() {
-    const { errors } = this.state;
-
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult } = this.state;
-
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -173,6 +180,23 @@ class AddEducation extends Component {
                 <Col span={12}>
                   {getFieldDecorator("range-picker", rangeConfig)(
                     <RangePicker style={{ width: "100%" }} />
+                  )}
+                </Col>
+                <Col span={12} />
+              </Row>
+            </FormItem>
+            <FormItem {...tailFormItemLayout}>
+              <Row gutter={8}>
+                <Col span={12}>
+                  {getFieldDecorator("current", {
+                    initialValue: this.state.current
+                  })(
+                    <Checkbox
+                      checked={this.state.current}
+                      onChange={this.onCheck}
+                    >
+                      直到现在
+                    </Checkbox>
                   )}
                 </Col>
                 <Col span={12} />
