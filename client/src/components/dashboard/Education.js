@@ -2,13 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { deleteEducation } from "../../actions/profileActions";
-import { Table, Popconfirm, message, Button } from "antd";
+import { Table, Popconfirm, message } from "antd";
 import Moment from "react-moment";
 
 class Education extends Component {
-  // onDeleteClick = id => {
-  //   this.props.deleteEducation(id);
-  // };
   render() {
     const { deleteEducation } = this.props;
     const popContent = "你确定要删除此项吗?";
@@ -50,10 +47,6 @@ class Education extends Component {
         key: "action",
         render: (text, record, index) => (
           <span>
-            {/* <a
-              href="javascript:;"
-              onClick={() => this.onDeleteClick(text.action)}
-            > */}
             <Popconfirm
               placement="left"
               title={popContent}
@@ -61,7 +54,7 @@ class Education extends Component {
               okText="是"
               cancelText="否"
             >
-              <Button>删除</Button>
+              <a style={{ color: "red" }}>删除</a>
             </Popconfirm>
           </span>
         )
