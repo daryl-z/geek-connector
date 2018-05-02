@@ -6,7 +6,7 @@ import ProfileHeader from "./ProfileHeader";
 import ProfileAbout from "./ProfileAbout";
 import ProfileCreds from "./ProfileCreds";
 import ProfileGithub from "./ProfileGithub";
-import { Spin, Layout, Button, Alert, Col, Row, Card, Icon } from "antd";
+import { Spin, Layout, Col, Row, Card, Icon } from "antd";
 import { getProfileByHandle } from "../../actions/profileActions";
 
 const { Content } = Layout;
@@ -29,7 +29,15 @@ class Profile extends Component {
     let profileContent;
 
     if (profile === null || loading) {
-      profileContent = <Spin />;
+      profileContent = (
+        <Row>
+          <Col span={11} />
+          <Col span={2}>
+            <Spin tip="正在加载..." />
+          </Col>
+          <Col span={11} />
+        </Row>
+      );
     } else {
       profileContent = (
         <div>

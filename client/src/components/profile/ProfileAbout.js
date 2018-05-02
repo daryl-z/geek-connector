@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Spin, Layout, Button, Alert, Col, Row, Card, Icon } from "antd";
+import { Col, Row, Card } from "antd";
 import isEmpty from "../../validation/is-empty";
 
 class ProfileAbout extends Component {

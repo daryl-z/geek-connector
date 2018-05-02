@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { addExperience } from "../../actions/profileActions";
@@ -7,7 +7,6 @@ import options from "../common/cascader-address-options";
 import {
   Form,
   Input,
-  Select,
   Row,
   Col,
   Button,
@@ -18,7 +17,7 @@ import {
 } from "antd";
 
 const FormItem = Form.Item;
-const Option = Select.Option;
+
 const { TextArea } = Input;
 const { Content } = Layout;
 const RangePicker = DatePicker.RangePicker;
@@ -74,7 +73,6 @@ class AddExperience extends Component {
     // const { errors } = this.state;
 
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult } = this.state;
 
     const formItemLayout = {
       labelCol: {
