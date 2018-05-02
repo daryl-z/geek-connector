@@ -54,7 +54,7 @@ class Dashboard extends Component {
               <Col>
                 欢迎,<Link to={`/profile/${profile.handle}`}>{user.name}</Link>用户!
               </Col>
-              <ProfileOperation />
+              <ProfileOperation profile={profile} />
             </Row>
             <Experience experience={profile.experience} />
             <Education education={profile.education} />
