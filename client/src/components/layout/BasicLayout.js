@@ -8,7 +8,6 @@ import { logoutUser } from "../../actions/authActions";
 import { setCurrentUser } from "../../actions/authActions";
 import { clearCurrentProfile } from "../../actions/profileActions";
 import store from "../../store";
-
 import GlobalHeader from "./GlobalHeader";
 import IndexContent from "./IndexContent";
 import GlobalFooter from "./GlobalFooter";
@@ -20,6 +19,8 @@ import CreateProfile from "../create-profile/CreateProfile";
 import EditProfile from "../edit-profile/EditProfile";
 import AddExperience from "../add-credentials/AddExperience";
 import AddEducation from "../add-credentials/AddEducation";
+import Profiles from "../profiles/Profiles";
+import Profile from "../profile/Profile";
 
 // check for token
 if (localStorage.jwtToken) {
@@ -49,6 +50,8 @@ export default class BasicLayout extends Component {
               <div>
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
+                <Route exact path="/profiles" component={Profiles} />
+                <Route exact path="/profile/:handle" component={Profile} />
                 <Switch>
                   <PrivateRoute exact path="/dashboard" component={Dashboard} />
                 </Switch>

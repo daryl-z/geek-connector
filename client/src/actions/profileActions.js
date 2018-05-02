@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   GET_PROFILE,
+  GET_PROFILES,
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
@@ -26,7 +27,26 @@ export const getCurrentProfile = () => dispatch => {
     );
 };
 
-// Create Profile
+// 通过handle获取简介
+export const getProfileByHandle = handle => dispatch => {
+  dispatch(setProfileLoading());
+  axios
+    .get(`/api/profile/handle/${handle}`)
+    .then(res =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: null
+      })
+    );
+};
+
+// 创建简介
 export const createProfile = (profileData, history) => dispatch => {
   axios
     .post("/api/profile", profileData)
@@ -39,7 +59,7 @@ export const createProfile = (profileData, history) => dispatch => {
     );
 };
 
-// Add experience
+// 添加工作经历
 export const addExperience = (expData, history) => dispatch => {
   axios
     .post("/api/profile/experience", expData)
@@ -52,7 +72,7 @@ export const addExperience = (expData, history) => dispatch => {
     );
 };
 
-// Add education
+// 添加教育经历
 export const addEducation = (eduData, history) => dispatch => {
   axios
     .post("/api/profile/education", eduData)
@@ -65,7 +85,7 @@ export const addEducation = (eduData, history) => dispatch => {
     );
 };
 
-// Delete Experience
+// 删除工作经历
 export const deleteExperience = id => dispatch => {
   axios
     .delete(`/api/profile/experience/${id}`)
@@ -83,7 +103,7 @@ export const deleteExperience = id => dispatch => {
     );
 };
 
-// Delete Education
+// 删除教育经历
 export const deleteEducation = id => dispatch => {
   axios
     .delete(`/api/profile/education/${id}`)
@@ -101,7 +121,7 @@ export const deleteEducation = id => dispatch => {
     );
 };
 
-// Delete account & profile
+// 删除账号和简介
 export const deleteAccount = () => dispatch => {
   if (window.confirm("Are you sure? This can NOT be undone!")) {
     axios
@@ -121,26 +141,18 @@ export const deleteAccount = () => dispatch => {
   }
 };
 
-// profile loading
+// 简介加载中
 export const setProfileLoading = () => {
   return {
     type: PROFILE_LOADING
   };
 };
 
-// 清除profile
-export const clearCurrentProfile = () => {
-  return {
-    type: CLEAR_CURRENT_PROFILE
-  };
-};
-
-
-// Get all profiles
+// 获取所有的用户简介
 export const getProfiles = () => dispatch => {
   dispatch(setProfileLoading());
   axios
-    .get('/api/profile/all')
+    .get("/api/profile/all")
     .then(res =>
       dispatch({
         type: GET_PROFILES,
@@ -155,7 +167,7 @@ export const getProfiles = () => dispatch => {
     );
 };
 
-// Clear profile
+// 清空当前简介
 export const clearCurrentProfile = () => {
   return {
     type: CLEAR_CURRENT_PROFILE
