@@ -34,14 +34,14 @@ class Profile extends Component {
       profileContent = (
         <div>
           <ProfileHeader profile={profile} />
-          {/* <ProfileAbout profile={profile} />
+          <ProfileAbout profile={profile} />
+          {profile.githubusername ? (
+            <ProfileGithub username={profile.githubusername} />
+          ) : null}
           <ProfileCreds
             education={profile.education}
             experience={profile.experience}
           />
-          {profile.githubusername ? (
-            <ProfileGithub username={profile.githubusername} />
-          ) : null} */}
         </div>
       );
     }
@@ -53,6 +53,7 @@ class Profile extends Component {
             返回个人中心
           </Link>
           <Card
+            bordered={false}
             style={{ margin: "0 20px" }}
             extra={<Icon type="ellipsis" />}
             title={

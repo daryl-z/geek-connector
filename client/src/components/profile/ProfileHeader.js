@@ -1,20 +1,8 @@
 import React, { Component } from "react";
-import {
-  Spin,
-  Layout,
-  Button,
-  Alert,
-  Col,
-  Row,
-  Card,
-  Icon,
-  Avatar,
-  Divider
-} from "antd";
+import { Card, Icon, Avatar } from "antd";
 import isEmpty from "../../validation/is-empty";
 import getLocation from "../common/get-location";
 
-const { Content } = Layout;
 const { Meta } = Card;
 
 class ProfileHeader extends Component {
