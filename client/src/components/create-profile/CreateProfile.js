@@ -20,10 +20,10 @@ import {
 } from "antd";
 
 const FormItem = Form.Item;
-const Option = Select.Option;
-const AutoCompleteOption = AutoComplete.Option;
 const { TextArea } = Input;
 const { Content } = Layout;
+const Option = Select.Option;
+const AutoCompleteOption = AutoComplete.Option;
 
 class CreateProfile extends Component {
   state = {

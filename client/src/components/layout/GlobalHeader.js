@@ -40,6 +40,13 @@ class GlobalHeader extends Component {
         </Link>
       </Menu.Item>
     );
+
+    const posts = (
+      <Menu.Item key="posts" style={{ float: "right" }}>
+        <Link to="/feed">帖子</Link>
+      </Menu.Item>
+    );
+
     const userAvatar = (
       <Menu.Item key="avatar" style={{ float: "right" }}>
         <Link to="/dashboard">
@@ -70,13 +77,11 @@ class GlobalHeader extends Component {
           <Menu.Item key="4">
             <Link to="/">首页</Link>
           </Menu.Item>
-          <Menu.Item key="2">帖子</Menu.Item>
           <Menu.Item key="1">
-            {" "}
             <Link to="/profiles">开发者们</Link>
           </Menu.Item>
           {isAuthenticated
-            ? [authLinks, userAvatar]
+            ? [authLinks, userAvatar, posts]
             : [registerLink, loginLink]}
         </Menu>
       </Header>

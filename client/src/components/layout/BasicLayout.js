@@ -3,6 +3,7 @@ import { Layout } from "antd";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import jwt_decode from "jwt-decode";
+
 import setAuthToken from "../../utils/setAuthToken";
 import { logoutUser } from "../../actions/authActions";
 import { setCurrentUser } from "../../actions/authActions";
@@ -21,6 +22,9 @@ import AddExperience from "../add-credentials/AddExperience";
 import AddEducation from "../add-credentials/AddEducation";
 import Profiles from "../profiles/Profiles";
 import Profile from "../profile/Profile";
+import Posts from "../posts/Posts";
+import Post from "../post/Post";
+import NotFound from "../not-found/NotFound";
 
 // check for token
 if (localStorage.jwtToken) {
@@ -83,6 +87,13 @@ export default class BasicLayout extends Component {
                     component={AddEducation}
                   />
                 </Switch>
+                <Switch>
+                  <PrivateRoute exact path="/feed" component={Posts} />
+                </Switch>
+                <Switch>
+                  <PrivateRoute exact path="/post/:id" component={Post} />
+                </Switch>
+                <Route exact path="/not-found" component={NotFound} />
               </div>
               <GlobalFooter />
             </Layout>
