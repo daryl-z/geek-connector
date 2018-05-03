@@ -58,7 +58,7 @@ class Profile extends Component {
       <Content style={{ padding: "0 50px" }}>
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
           <Link to="/dashboard" style={{ margin: "0 20px" }}>
-            返回个人中心
+            我的个人中心
           </Link>
           <Card
             bordered={false}

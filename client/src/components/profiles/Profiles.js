@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Spin, Row, Col, Card, Avatar, Layout } from "antd";
+import { Spin, Row, Col, Card, Avatar, Layout, Tag } from "antd";
 
 import { getProfiles } from "../../actions/profileActions";
 import { Link } from "react-router-dom";
@@ -33,7 +33,7 @@ class Profiles extends Component {
     } else {
       if (profiles.length > 0) {
         profileItems = profiles.map(profile => (
-          <Col span={8} key={profile._id}>
+          <Col span={6} key={profile._id}>
             <Card
               title={
                 <div>
@@ -43,7 +43,10 @@ class Profiles extends Component {
                 </div>
               }
               bordered={true}
-              style={{ height: "300px", marginBottom: "20px" }}
+              actions={[
+                <Link to={`/profile/${profile.handle}`}>查看简介</Link>
+              ]}
+              style={{ maxHeight: "300px", marginBottom: "20px" }}
             >
               <div>
                 <p>
@@ -55,16 +58,19 @@ class Profiles extends Component {
                 {isEmpty(profile.location) ? null : (
                   <p>{getLocation(profile.location).join("-")}</p>
                 )}
-                <Link to={`/profile/${profile.handle}`}>查看简介</Link>
               </div>
-              <div>
-                <h4>技能点</h4>
-                <ul>
-                  {profile.skills
-                    .slice(0, 4)
-                    .map((skill, index) => <li key={index}>{skill}</li>)}
-                </ul>
-              </div>
+              <Row>
+                <Col span={4}>
+                  <h3>技能点:</h3>
+                </Col>
+                <Col span={20}>
+                  {profile.skills.slice(0, 4).map((skill, index) => (
+                    <Tag color="blue" key={index}>
+                      {skill}
+                    </Tag>
+                  ))}
+                </Col>
+              </Row>
             </Card>
           </Col>
         ));
