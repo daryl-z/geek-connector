@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const mongoose = require("mongoose");
+var multer = require("multer");
 
 // Post model
 const Post = require("../../models/Post");
@@ -263,4 +264,25 @@ router.delete(
       .catch(err => res.status(404).json({ postnotfound: "没找到帖子" }));
   }
 );
+
+const Storage = multer.diskStorage({
+  destination: function(req, file, callback) {
+    callback(null, "/public/images");
+  },
+  filename: function(req, file, callback) {
+    callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+  }
+});
+
+let upload = multer({ storage: Storage }).array("imgUploader", 3); //Field name and max count
+
+router.post("/api/upload", function(req, res) {
+  upload(req, res, function(err) {
+    if (err) {
+      return res.end("Something went wrong!");
+    }
+    return res.end("File uploaded sucessfully!.");
+  });
+});
+
 module.exports = router;

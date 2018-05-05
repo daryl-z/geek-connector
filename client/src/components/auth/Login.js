@@ -94,7 +94,7 @@ class Login extends Component {
           <div style={{ display: "flex", justifyContent: "center" }}>
             <h1>用户登录</h1>
           </div>
-          <Form onSubmit={this.handleSubmit} className="login-form">
+          <Form onSubmit={this.handleSubmit}>
             <FormItem>
               {loginAlertVisible &&
                 errors.loginEmail &&
@@ -120,9 +120,7 @@ class Login extends Component {
 
             <FormItem {...formItemLayout} label="密码">
               {getFieldDecorator("password", {
-                rules: [
-                  { required: true, message: "Please input your Password!" }
-                ]
+                rules: [{ required: true, message: "请输入您的密码！" }]
               })(
                 <Input
                   prefix={
@@ -142,17 +140,11 @@ class Login extends Component {
             </FormItem>
 
             <FormItem {...tailFormItemLayout}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="login-form-button"
-              >
+              <Button type="primary" htmlType="submit">
                 登录
               </Button>
               &nbsp;&nbsp;&nbsp;
-              <a className="login-form-forgot" href="">
-                忘记密码
-              </a>
+              <a href="">忘记密码</a>
               或者 <Link to="/register">现在注册！</Link>
             </FormItem>
           </Form>

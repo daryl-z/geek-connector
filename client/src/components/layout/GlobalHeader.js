@@ -65,7 +65,7 @@ class GlobalHeader extends Component {
     return (
       <Header className="header">
         <Link to="/" className="logo">
-          Dev Player
+          {/* Dev Player */}
         </Link>
 
         <Menu

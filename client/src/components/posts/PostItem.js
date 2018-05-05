@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { List, Avatar, Icon } from "antd";
+
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
@@ -27,63 +29,134 @@ class PostItem extends Component {
     }
   }
 
+  findUserUnlike(unlikes) {
+    const { auth } = this.props;
+    if (unlikes.filter(unlike => unlike.user === auth.user.id).length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   render() {
     const { post, auth, showActions } = this.props;
 
+    const listData = [];
+    for (let i = 0; i < 23; i++) {
+      listData.push({
+        href: "http://ant.design",
+        title: `ant design part ${i}`,
+        avatar:
+          "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
+        description:
+          "Ant Design, a design language for background applications, is refined by Ant UED Team.",
+        content:
+          "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently."
+      });
+    }
+
+    const IconText = ({ type, text }) => (
+      <span>
+        <Icon type={type} style={{ marginRight: 8 }} />
+        {text}
+      </span>
+    );
+
     return (
-      <div className="card card-body mb-3">
-        <div className="row">
-          <div className="col-md-2">
-            <a href="profile.html">
+      <List
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          onChange: page => {
+            console.log(page);
+          },
+          pageSize: 3
+        }}
+        dataSource={listData}
+        footer={
+          <div>
+            <b>ant design</b> footer part
+          </div>
+        }
+        renderItem={item => (
+          <List.Item
+            key={item.title}
+            actions={[
+              <IconText type="star-o" text="156" />,
+              <IconText type="like-o" text="156" />,
+              <IconText type="message" text="2" />
+            ]}
+            extra={
               <img
-                className="rounded-circle d-none d-md-block"
-                src={post.avatar}
-                alt=""
+                width={272}
+                alt="logo"
+                src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
               />
-            </a>
-            <br />
-            <p className="text-center">{post.name}</p>
-          </div>
-          <div className="col-md-10">
-            <p className="lead">{post.text}</p>
-            {showActions ? (
-              <span>
-                <button
-                  onClick={this.onLikeClick.bind(this, post._id)}
-                  type="button"
-                  className="btn btn-light mr-1"
-                >
-                  <i
-                    className={classnames("fas fa-thumbs-up", {
-                      "text-info": this.findUserLike(post.likes)
-                    })}
-                  />
-                  <span className="badge badge-light">{post.likes.length}</span>
-                </button>
-                <button
-                  onClick={this.onUnlikeClick.bind(this, post._id)}
-                  type="button"
-                  className="btn btn-light mr-1"
-                >
-                  <i className="text-secondary fas fa-thumbs-down" />
-                </button>
-                <Link to={`/post/${post._id}`} className="btn btn-info mr-1">
-                  评论
-                </Link>
-                {post.user === auth.user.id ? (
-                  <button
-                    onClick={this.onDeleteClick.bind(this, post._id)}
-                    type="button"
-                    className="btn btn-danger mr-1"
-                  >
-                    <i className="fas fa-times" />
-                  </button>
-                ) : null}
-              </span>
-            ) : null}
-          </div>
-        </div>
-      </div>
+            }
+          >
+            <List.Item.Meta
+              avatar={<Avatar src={item.avatar} />}
+              title={<a href={item.href}>{item.title}</a>}
+              description={item.description}
+            />
+            {item.content}
+          </List.Item>
+        )}
+      />
+
+      // <div className="card card-body mb-3">
+      //   <div className="row">
+      //     <div className="col-md-2">
+      //       <a href="profile.html">
+      //         <img
+      //           className="rounded-circle d-none d-md-block"
+      //           src={post.avatar}
+      //           alt=""
+      //         />
+      //       </a>
+      //       <br />
+      //       <p className="text-center">{post.name}</p>
+      //     </div>
+      //     <div className="col-md-10">
+      //       <p className="lead">{post.text}</p>
+      //       {showActions ? (
+      //         <span>
+      //           <button
+      //             onClick={this.onLikeClick.bind(this, post._id)}
+      //             type="button"
+      //             className="btn btn-light mr-1"
+      //           >
+      //             <i
+      //               className={classnames("fas fa-thumbs-up", {
+      //                 "text-info": this.findUserLike(post.likes)
+      //               })}
+      //             />
+      //             <span className="badge badge-light">{post.likes.length}</span>
+      //           </button>
+      //           <button
+      //             onClick={this.onUnlikeClick.bind(this, post._id)}
+      //             type="button"
+      //             className="btn btn-light mr-1"
+      //           >
+      //             <i className="text-secondary fas fa-thumbs-down" />
+      //           </button>
+      //           <Link to={`/post/${post._id}`} className="btn btn-info mr-1">
+      //             评论
+      //           </Link>
+      //           {post.user === auth.user.id ? (
+      //             <button
+      //               onClick={this.onDeleteClick.bind(this, post._id)}
+      //               type="button"
+      //               className="btn btn-danger mr-1"
+      //             >
+      //               <i className="fas fa-times" />
+      //             </button>
+      //           ) : null}
+      //         </span>
+      //       ) : null}
+      //     </div>
+      //   </div>
+      // </div>
     );
   }
 }

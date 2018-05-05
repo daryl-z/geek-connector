@@ -16,9 +16,14 @@ import {
   AutoComplete,
   Layout
 } from "antd";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 
 import { addPost } from "../../actions/postActions";
-
+// import EditorConvertToHTML from "../common/draft-editor";
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
@@ -27,12 +32,44 @@ class PostForm extends Component {
     super(props);
     this.state = {
       text: "",
-      errors: {}
+      errors: {},
+      editorState: EditorState.createEmpty(),
+      htmlContent: ""
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
+
+  onEditorStateChange = editorState => {
+    this.setState(
+      {
+        editorState,
+        htmlConent: draftToHtml(convertToRaw(editorState.getCurrentContent()))
+      },
+      // console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
+      console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
+    );
+  };
+
+  uploadImageCallBack = file => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/posts/upload");
+      xhr.setRequestHeader("Authorization", "Client-ID XXXXX");
+      const data = new FormData();
+      data.append("image", file);
+      xhr.send(data);
+      xhr.addEventListener("load", () => {
+        const response = JSON.parse(xhr.responseText);
+        resolve(response);
+      });
+      xhr.addEventListener("error", () => {
+        const error = JSON.parse(xhr.responseText);
+        reject(error);
+      });
+    });
+  };
 
   componentWillReceiveProps(newProps) {
     if (newProps.errors) {
@@ -60,7 +97,7 @@ class PostForm extends Component {
   }
 
   render() {
-    const { errors } = this.state;
+    const { errors, editorState } = this.state;
 
     const { getFieldDecorator } = this.props.form;
     const { autoCompleteResult } = this.state;
@@ -104,7 +141,32 @@ class PostForm extends Component {
               <Col span={12}>
                 {getFieldDecorator("post", {
                   rules: []
-                })(<TextArea placeholder="想要说的话，你还记得吗" />)}
+                })(
+                  <div>
+                    <Editor
+                      editorState={editorState}
+                      wrapperClassName="wrapper"
+                      editorClassName="editor"
+                      editorStyle={{ border: "1px solid #f1f1f1" }}
+                      onEditorStateChange={this.onEditorStateChange}
+                      toolbar={{
+                        inline: { inDropdown: true },
+                        list: { inDropdown: true },
+                        textAlign: { inDropdown: true },
+                        link: { inDropdown: true },
+                        history: { inDropdown: true },
+                        image: {
+                          uploadCallback: this.uploadImageCallBack,
+                          alt: { present: true, mandatory: true }
+                        }
+                      }}
+                    />
+                    {/* <textarea
+                    disabled
+                    value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
+                  /> */}
+                  </div>
+                )}
               </Col>
               <Col span={12} />
             </Row>

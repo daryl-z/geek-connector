@@ -162,9 +162,6 @@ class Register extends Component {
                     message: "当前邮箱不合法！"
                   },
                   {
-                    validator: this.isRegistered
-                  },
-                  {
                     required: true,
                     message: "请输入您的邮箱！"
                   }
@@ -209,7 +206,7 @@ class Register extends Component {
               })(
                 <Checkbox>
                   我已经阅读并同意
-                  <a href="javacript:;">《经常被无视的协议》</a>
+                  <a href="javacript:;">《不同意不给注册协议》</a>
                 </Checkbox>
               )}
             </FormItem>
