@@ -20,13 +20,13 @@ class Experience extends Component {
         title: "公司",
         dataIndex: "company",
         key: "company",
-        render: text => <a href="javascript:;">{text}</a>
+        render: text => <a>{text}</a>
       },
       {
         title: "标题",
         dataIndex: "title",
         key: "title",
-        render: text => <a href="javascript:;">{text}</a>
+        render: text => <a>{text}</a>
       },
       {
         title: "起止日期",

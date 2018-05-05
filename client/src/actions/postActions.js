@@ -11,7 +11,7 @@ import {
 } from "./types";
 
 // 发帖
-export const addPost = postData => dispatch => {
+export const addPost = (postData, history) => dispatch => {
   dispatch(clearErrors());
   axios
     .post("/api/posts", postData)
@@ -21,12 +21,14 @@ export const addPost = postData => dispatch => {
         payload: res.data
       })
     )
-    .catch(err =>
-      dispatch({
+    .then(res => history.push("/"))
+    .catch(err => {
+      console.log(err);
+      return dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
+      });
+    });
 };
 
 // 获取帖子列表

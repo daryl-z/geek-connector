@@ -51,7 +51,7 @@ class ProfileHeader extends Component {
                   )}
 
                   {isEmpty(profile.social && profile.social.wechat) ? null : (
-                    <a href="#" title={profile.social.wechat}>
+                    <a title={profile.social.wechat}>
                       <Icon type="wechat" /> &nbsp;&nbsp;&nbsp;&nbsp;
                     </a>
                   )}

@@ -1,18 +1,28 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { Form, Input, Icon, Row, Col, Card, Button, Layout } from "antd";
+import { Link, withRouter } from "react-router-dom";
+import {
+  Form,
+  Input,
+  Icon,
+  Row,
+  Col,
+  Card,
+  Button,
+  Layout,
+  Select
+} from "antd";
 import { EditorState, convertToRaw, ContentState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
+// import htmlToDraft from "html-to-draftjs";
 
 import { addPost } from "../../actions/postActions";
-// import EditorConvertToHTML from "../common/draft-editor";
 const FormItem = Form.Item;
 const { TextArea } = Input;
+const Option = Select.Option;
 
 class PostForm extends Component {
   constructor(props) {
@@ -73,7 +83,7 @@ class PostForm extends Component {
           avatar: user.avatar
         };
         console.log("Received values of form: ", newPost);
-        this.props.addPost(newPost);
+        this.props.addPost(newPost, this.props.history);
         this.setState({ htmlContent: "" });
       }
     });
@@ -139,7 +149,36 @@ class PostForm extends Component {
               <Col span={12} />
             </Row>
           </FormItem>
-
+          <FormItem {...formItemLayout} label="帖子分类">
+            <Row gutter={8}>
+              <Col span={12}>
+                {getFieldDecorator("category", {
+                  rules: [
+                    {
+                      required: true,
+                      message: "请选择帖子的分类!",
+                      whitespace: true
+                    }
+                  ]
+                })(
+                  <Select
+                    style={{ width: "100%" }}
+                    onChange={this.handleChange}
+                    placeholder="帖子分类"
+                  >
+                    <Option value="HTML/CSS">HTML/CSS</Option>
+                    <Option value="JavaScript">JavaScript</Option>
+                    <Option value="React">React</Option>
+                    <Option value="Vue">Vue</Option>
+                    <Option value="NodeJS">NodeJS</Option>
+                    <Option value="Java">Java</Option>
+                    <Option value="other">其他</Option>
+                  </Select>
+                )}
+              </Col>
+              <Col span={12} />
+            </Row>
+          </FormItem>
           <FormItem {...formItemLayout} label="帖子内容">
             <Row gutter={8}>
               <Col span={12}>
@@ -169,6 +208,7 @@ class PostForm extends Component {
               <Col span={12} />
             </Row>
           </FormItem>
+
           <FormItem {...tailFormItemLayout}>
             <Button
               type="primary"
@@ -195,4 +235,6 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { addPost })(Form.create()(PostForm));
+export default connect(mapStateToProps, { addPost })(
+  Form.create()(withRouter(PostForm))
+);

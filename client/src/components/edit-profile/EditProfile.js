@@ -230,13 +230,15 @@ class EditProfile extends Component {
                       onChange={this.handleChange}
                       placeholder="请选择工作状态"
                     >
-                      <Option value="developer">开发者</Option>
-                      <Option value="junior">初级开发者</Option>
-                      <Option value="senior">高级开发者</Option>
-                      <Option value="teacher">教师</Option>
-                      <Option value="student">学生或者是学习中</Option>
-                      <Option value="other">其他</Option>
+                      <Option value="开发者">开发者</Option>
+                      <Option value="初级开发者">初级开发者</Option>
+                      <Option value="高级开发者">高级开发者</Option>
+                      <Option value="教师">教师</Option>
+                      <Option value="学生或者编程爱好者">
+                        学生或者是学习中
+                      </Option>
                     </Select>
+                  )}
                   )}
                 </Col>
                 <Col span={12} />

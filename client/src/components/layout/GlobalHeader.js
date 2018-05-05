@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Menu, Avatar } from "antd";
+import { Layout, Menu, Avatar, Icon } from "antd";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -43,7 +43,9 @@ class GlobalHeader extends Component {
 
     const posts = (
       <Menu.Item key="posts" style={{ float: "right" }}>
-        <Link to="/feed">帖子</Link>
+        <Link to="/feed">
+          <Icon type="edit" />发帖
+        </Link>
       </Menu.Item>
     );
 
