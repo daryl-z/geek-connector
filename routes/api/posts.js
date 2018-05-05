@@ -265,6 +265,9 @@ router.delete(
   }
 );
 
+// @route   DELETE api/posts/upload
+// @desc    Add image from local
+// @access  Private
 const Storage = multer.diskStorage({
   destination: function(req, file, callback) {
     callback(null, "/public/images");

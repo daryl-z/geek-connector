@@ -2,20 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  Form,
-  Input,
-  Tooltip,
-  Icon,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Card,
-  Button,
-  AutoComplete,
-  Layout
-} from "antd";
+import { Form, Input, Icon, Row, Col, Card, Button, Layout } from "antd";
 import { EditorState, convertToRaw, ContentState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -31,21 +18,17 @@ class PostForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: "",
       errors: {},
       editorState: EditorState.createEmpty(),
       htmlContent: ""
     };
-
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onEditorStateChange = editorState => {
     this.setState(
       {
         editorState,
-        htmlConent: draftToHtml(convertToRaw(editorState.getCurrentContent()))
+        htmlContent: draftToHtml(convertToRaw(editorState.getCurrentContent()))
       },
       // console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
       console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
@@ -77,30 +60,29 @@ class PostForm extends Component {
     }
   }
 
-  onSubmit(e) {
+  handleSubmit = e => {
     e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        const { user } = this.props.auth;
 
-    const { user } = this.props.auth;
-
-    const newPost = {
-      text: this.state.text,
-      name: user.name,
-      avatar: user.avatar
-    };
-
-    this.props.addPost(newPost);
-    this.setState({ text: "" });
-  }
-
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
+        const newPost = {
+          title: values.title,
+          text: this.state.htmlContent,
+          name: user.name,
+          avatar: user.avatar
+        };
+        console.log("Received values of form: ", newPost);
+        this.props.addPost(newPost);
+        this.setState({ htmlContent: "" });
+      }
+    });
+  };
 
   render() {
     const { errors, editorState } = this.state;
 
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -136,43 +118,63 @@ class PostForm extends Component {
         }
       >
         <Form>
+          <FormItem {...formItemLayout} label="标题：">
+            <Row gutter={8}>
+              <Col span={12}>
+                {getFieldDecorator("title", {
+                  rules: [
+                    {
+                      required: true,
+                      message: "请输入帖子标题!",
+                      whitespace: true
+                    },
+                    {
+                      min: 2,
+                      max: 180,
+                      message: "长度必须在2至180个字符之间"
+                    }
+                  ]
+                })(<Input />)}
+              </Col>
+              <Col span={12} />
+            </Row>
+          </FormItem>
+
           <FormItem {...formItemLayout} label="帖子内容">
             <Row gutter={8}>
               <Col span={12}>
                 {getFieldDecorator("post", {
                   rules: []
                 })(
-                  <div>
-                    <Editor
-                      editorState={editorState}
-                      wrapperClassName="wrapper"
-                      editorClassName="editor"
-                      editorStyle={{ border: "1px solid #f1f1f1" }}
-                      onEditorStateChange={this.onEditorStateChange}
-                      toolbar={{
-                        inline: { inDropdown: true },
-                        list: { inDropdown: true },
-                        textAlign: { inDropdown: true },
-                        link: { inDropdown: true },
-                        history: { inDropdown: true },
-                        image: {
-                          uploadCallback: this.uploadImageCallBack,
-                          alt: { present: true, mandatory: true }
-                        }
-                      }}
-                    />
-                    {/* <textarea
-                    disabled
-                    value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
-                  /> */}
-                  </div>
+                  <Editor
+                    editorState={editorState}
+                    wrapperClassName="wrapper"
+                    editorClassName="editor"
+                    editorStyle={{ border: "1px solid #f1f1f1" }}
+                    onEditorStateChange={this.onEditorStateChange}
+                    toolbar={{
+                      inline: { inDropdown: true },
+                      list: { inDropdown: true },
+                      textAlign: { inDropdown: true },
+                      link: { inDropdown: true },
+                      history: { inDropdown: true },
+                      image: {
+                        uploadCallback: this.uploadImageCallBack,
+                        alt: { present: true, mandatory: true }
+                      }
+                    }}
+                  />
                 )}
               </Col>
               <Col span={12} />
             </Row>
           </FormItem>
           <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={this.handleSubmit}
+            >
               提交
             </Button>
           </FormItem>

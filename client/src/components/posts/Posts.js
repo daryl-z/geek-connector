@@ -29,15 +29,15 @@ class Posts extends Component {
   }
 
   render() {
-    const { posts, loading } = this.props.post;
-    console.log(this.props.post);
-    let postContent;
+    // const { posts, loading } = this.props.post;
+    // console.log(this.props.post);
+    // let postContent;
 
-    if (posts === null || loading) {
-      postContent = <Spin />;
-    } else {
-      postContent = <PostFeed posts={posts} />;
-    }
+    // if (posts === null || loading) {
+    //   postContent = <Spin />;
+    // } else {
+    //   postContent = <PostFeed posts={posts} />;
+    // }
 
     return (
       <Content style={{ padding: "0 50px" }}>
@@ -46,7 +46,7 @@ class Posts extends Component {
             评论
           </Link>
           <PostForm />
-          {postContent}
+          {/* {postContent} */}
         </Layout>
       </Content>
     );

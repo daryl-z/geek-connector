@@ -7,9 +7,12 @@ const PostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "users"
   },
-  text: {
+  title: {
     type: String,
     require: true
+  },
+  text: {
+    type: String
   },
   name: {
     type: String
