@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import CommentForm from "./CommentForm";
 import CommentFeed from "./CommentFeed";
+import Moment from "react-moment";
 import {
   Form,
   Input,
@@ -28,6 +29,10 @@ class Post extends Component {
     this.props.getPost(this.props.match.params.id);
   }
 
+  createMarkup = htmlcode => ({
+    __html: htmlcode
+  });
+
   render() {
     const { post, loading } = this.props.post;
     let postContent;
@@ -37,6 +42,21 @@ class Post extends Component {
     } else {
       postContent = (
         <div>
+          <Card
+            title={
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <h1>{post.title}</h1>
+              </div>
+            }
+            style={{ margin: "20px 20px" }}
+          >
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              日期：<Moment format="YYYY/MM/DD">{post.date}</Moment>
+              <span>&nbsp;&nbsp;&nbsp;作者：</span>
+              {post.name}
+            </div>
+            <div dangerouslySetInnerHTML={this.createMarkup(post.text)} />
+          </Card>
           <CommentForm postId={post._id} />
           <CommentFeed postId={post._id} comments={post.comments} />
         </div>
@@ -46,9 +66,9 @@ class Post extends Component {
     return (
       <Content style={{ padding: "0 50px" }}>
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
-          <Link to="/feed" className="btn btn-light mb-3">
-            返回帖子列表
-          </Link>
+          <a onClick={this.props.history.goBack} style={{ margin: "0 20px" }}>
+            返回上一级
+          </a>
           {postContent}
         </Layout>
       </Content>
@@ -65,4 +85,4 @@ const mapStateToProps = state => ({
   post: state.post
 });
 
-export default connect(mapStateToProps, { getPost })(Post);
+export default connect(mapStateToProps, { getPost })(withRouter(Post));

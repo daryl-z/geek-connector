@@ -37,27 +37,19 @@ class CommentForm extends Component {
     }
   }
 
-  // onSubmit(e) {
-  //   e.preventDefault();
-
-  //   const { user } = this.props.auth;
-  //   const { postId } = this.props;
-
-  //   const newComment = {
-  //     text: this.state.text,
-  //     name: user.name,
-  //     avatar: user.avatar
-  //   };
-
-  //   this.props.addComment(postId, newComment);
-  //   this.setState({ text: "" });
-  // }
-
   handleSubmit = e => {
     e.preventDefault();
+    const { user } = this.props.auth;
+    const { postId } = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        const newComment = {
+          text: values.comment,
+          name: user.name,
+          avatar: user.avatar
+        };
         console.log("Received values of form: ", values);
+        this.props.addComment(postId, newComment);
       }
     });
   };
@@ -98,24 +90,30 @@ class CommentForm extends Component {
         extra={<Icon type="ellipsis" />}
         title={
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <h4>创建新的评论</h4>
+            <h4>创建新的回帖</h4>
           </div>
         }
       >
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label="评论内容">
+          <FormItem {...formItemLayout} label="回复">
             <Row gutter={8}>
               <Col span={12}>
                 {getFieldDecorator("comment", {
-                  rules: []
-                })(<TextArea placeholder="新的评论" />)}
+                  rules: [
+                    {
+                      min: 2,
+                      max: 800,
+                      message: "回复长度必须在2至800个字符之间"
+                    }
+                  ]
+                })(<TextArea placeholder="回复内容" />)}
               </Col>
               <Col span={12} />
             </Row>
           </FormItem>
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
-              提交评论
+              提交
             </Button>
           </FormItem>
         </Form>
@@ -125,7 +123,6 @@ class CommentForm extends Component {
 }
 
 CommentForm.propTypes = {
-  // addPost: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   postId: PropTypes.string.isRequired,
   errors: PropTypes.object.isRequired
