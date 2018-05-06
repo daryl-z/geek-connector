@@ -17,7 +17,7 @@ const PostSchema = new Schema({
   name: {
     type: String
   },
-  catagory: {
+  category: {
     type: String,
     default: "其它"
   },

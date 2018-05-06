@@ -22,13 +22,12 @@ export const addPost = (postData, history) => dispatch => {
       })
     )
     .then(res => history.push("/"))
-    .catch(err => {
-      console.log(err);
-      return dispatch({
+    .catch(err =>
+      dispatch({
         type: GET_ERRORS,
-        payload: err.response.data
-      });
-    });
+        payload: err.response ? err.response.data : ""
+      })
+    );
 };
 
 // 获取帖子列表

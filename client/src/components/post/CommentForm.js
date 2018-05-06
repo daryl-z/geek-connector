@@ -29,9 +29,6 @@ class CommentForm extends Component {
       text: "",
       errors: {}
     };
-
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -40,25 +37,30 @@ class CommentForm extends Component {
     }
   }
 
-  onSubmit(e) {
+  // onSubmit(e) {
+  //   e.preventDefault();
+
+  //   const { user } = this.props.auth;
+  //   const { postId } = this.props;
+
+  //   const newComment = {
+  //     text: this.state.text,
+  //     name: user.name,
+  //     avatar: user.avatar
+  //   };
+
+  //   this.props.addComment(postId, newComment);
+  //   this.setState({ text: "" });
+  // }
+
+  handleSubmit = e => {
     e.preventDefault();
-
-    const { user } = this.props.auth;
-    const { postId } = this.props;
-
-    const newComment = {
-      text: this.state.text,
-      name: user.name,
-      avatar: user.avatar
-    };
-
-    this.props.addComment(postId, newComment);
-    this.setState({ text: "" });
-  }
-
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log("Received values of form: ", values);
+      }
+    });
+  };
 
   render() {
     const { errors } = this.state;
@@ -100,7 +102,7 @@ class CommentForm extends Component {
           </div>
         }
       >
-        <Form>
+        <Form onSubmit={this.handleSubmit}>
           <FormItem {...formItemLayout} label="评论内容">
             <Row gutter={8}>
               <Col span={12}>
@@ -123,7 +125,7 @@ class CommentForm extends Component {
 }
 
 CommentForm.propTypes = {
-  addPost: PropTypes.func.isRequired,
+  // addPost: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   postId: PropTypes.string.isRequired,
   errors: PropTypes.object.isRequired

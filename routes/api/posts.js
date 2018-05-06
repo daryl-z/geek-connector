@@ -28,6 +28,7 @@ router.post(
       return res.status(400).json(errors);
     }
     const newPost = new Post({
+      title: req.body.title,
       text: req.body.text,
       name: req.body.name,
       avatar: req.body.avatar,

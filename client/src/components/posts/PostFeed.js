@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { List, Avatar, Button, Spin, Icon } from "antd";
-import { withRouter } from "react-router-dom";
-import PostItem from "./PostItem";
+import { List, Avatar, Button, Spin, Icon, Col, Row } from "antd";
+import { withRouter, Link } from "react-router-dom";
+
 import reqwest from "reqwest";
 
 const fakeDataUrl =
@@ -14,6 +14,7 @@ class PostFeed extends Component {
     loadingMore: false,
     showLoadingMore: true
   };
+
   componentDidMount() {
     this.getData(res => {
       this.setState({
@@ -22,6 +23,7 @@ class PostFeed extends Component {
       });
     });
   }
+
   getData = callback => {
     reqwest({
       url: fakeDataUrl,
@@ -96,7 +98,7 @@ class PostFeed extends Component {
   }
 
   render() {
-    const { posts } = this.props;
+    let { posts } = this.props;
     console.log(posts);
     const { loading, loadingMore, showLoadingMore } = this.state;
 
@@ -123,7 +125,7 @@ class PostFeed extends Component {
       </div>
     ) : null;
 
-    return (
+    return posts ? (
       <List
         loading={loading}
         itemLayout="horizental"
@@ -132,8 +134,6 @@ class PostFeed extends Component {
         renderItem={item => (
           <List.Item
             actions={[
-              // <IconText type="star-o" text="156" />,
-
               <IconText
                 type={this.findUserLike(item.likes) ? "like" : "like-o"}
                 text={item.likes ? item.likes.length : "0"}
@@ -154,19 +154,33 @@ class PostFeed extends Component {
           >
             <List.Item.Meta
               avatar={<Avatar src={item.avatar} />}
-              title={<a href="#">{item.name}</a>}
-              description={item.text}
+              title={
+                <Link to={`/post/${item._id}`}>
+                  <h3>{item.title}</h3>
+                </Link>
+              }
+              description={item.name}
             />
-            <div dangerouslySetInnerHTML={this.createMarkup(item.text)} />
+            <div
+              style={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                maxWidth: "500px",
+                height: "30px"
+              }}
+              dangerouslySetInnerHTML={this.createMarkup(item.text)}
+            />
           </List.Item>
         )}
       />
+    ) : (
+      <Row>
+        <Col span={11} />
+        <Col span={2}>暂无帖子</Col>
+        <Col span={11} />
+      </Row>
     );
   }
 }
-
-PostFeed.propTypes = {
-  posts: PropTypes.array.isRequired
-};
-
 export default withRouter(PostFeed);
