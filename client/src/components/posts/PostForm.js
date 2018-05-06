@@ -77,6 +77,7 @@ class PostForm extends Component {
         const { user } = this.props.auth;
 
         const newPost = {
+          category: values.category,
           title: values.title,
           text: this.state.htmlContent,
           name: user.name,

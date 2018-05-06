@@ -33,7 +33,7 @@ router.post(
       name: req.body.name,
       avatar: req.body.avatar,
       user: req.user.id,
-      catagory: req.body.catagory
+      category: req.body.category
     });
     newPost.save().then(post => res.json(post));
   }
