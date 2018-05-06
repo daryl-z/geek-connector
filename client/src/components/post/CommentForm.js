@@ -16,6 +16,10 @@ import {
   AutoComplete,
   Layout
 } from "antd";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import draftToHtml from "draftjs-to-html";
 
 import { addComment } from "../../actions/postActions";
 
@@ -26,8 +30,9 @@ class CommentForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: "",
-      errors: {}
+      errors: {},
+      editorState: EditorState.createEmpty(),
+      htmlContent: ""
     };
   }
 
@@ -37,6 +42,36 @@ class CommentForm extends Component {
     }
   }
 
+  onEditorStateChange = editorState => {
+    this.setState(
+      {
+        editorState,
+        htmlContent: draftToHtml(convertToRaw(editorState.getCurrentContent()))
+      },
+      // console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
+      console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
+    );
+  };
+
+  uploadImageCallBack = file => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/posts/upload");
+      xhr.setRequestHeader("Authorization", "Client-ID XXXXX");
+      const data = new FormData();
+      data.append("image", file);
+      xhr.send(data);
+      xhr.addEventListener("load", () => {
+        const response = JSON.parse(xhr.responseText);
+        resolve(response);
+      });
+      xhr.addEventListener("error", () => {
+        const error = JSON.parse(xhr.responseText);
+        reject(error);
+      });
+    });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     const { user } = this.props.auth;
@@ -44,21 +79,20 @@ class CommentForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const newComment = {
-          text: values.comment,
+          text: this.state.htmlContent,
           name: user.name,
           avatar: user.avatar
         };
         console.log("Received values of form: ", values);
         this.props.addComment(postId, newComment);
+        this.setState({ htmlContent: "" });
       }
     });
   };
 
   render() {
-    const { errors } = this.state;
-
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult } = this.state;
+    const { editorState, errors } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -98,6 +132,35 @@ class CommentForm extends Component {
           <FormItem {...formItemLayout} label="回复">
             <Row gutter={8}>
               <Col span={12}>
+                {getFieldDecorator("post", {
+                  rules: []
+                })(
+                  <Editor
+                    editorState={editorState}
+                    wrapperClassName="wrapper"
+                    editorClassName="editor"
+                    editorStyle={{ border: "1px solid #f1f1f1" }}
+                    onEditorStateChange={this.onEditorStateChange}
+                    toolbar={{
+                      inline: { inDropdown: true },
+                      list: { inDropdown: true },
+                      textAlign: { inDropdown: true },
+                      link: { inDropdown: true },
+                      history: { inDropdown: true },
+                      image: {
+                        uploadCallback: this.uploadImageCallBack,
+                        alt: { present: true, mandatory: true }
+                      }
+                    }}
+                  />
+                )}
+              </Col>
+              <Col span={12} />
+            </Row>
+          </FormItem>
+          {/* <FormItem {...formItemLayout} label="回复">
+            <Row gutter={8}>
+              <Col span={12}>
                 {getFieldDecorator("comment", {
                   rules: [
                     {
@@ -110,7 +173,7 @@ class CommentForm extends Component {
               </Col>
               <Col span={12} />
             </Row>
-          </FormItem>
+          </FormItem> */}
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
               提交

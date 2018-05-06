@@ -146,10 +146,12 @@ class PostFeed extends Component {
                 text={item.unlikes ? item.unlikes.length : "0"}
                 onClick={() => this.onUnlikeClick(item._id)}
               />,
-              <IconText
-                type="message"
-                text={item.comments ? item.comments.length : "0"}
-              />
+              <Link to={`/post/${item._id}`}>
+                <IconText
+                  type="message"
+                  text={item.comments ? item.comments.length : "0"}
+                />
+              </Link>
             ]}
           >
             <List.Item.Meta

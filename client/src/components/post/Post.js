@@ -54,6 +54,8 @@ class Post extends Component {
               日期：<Moment format="YYYY/MM/DD">{post.date}</Moment>
               <span>&nbsp;&nbsp;&nbsp;作者：</span>
               {post.name}
+              <span>&nbsp;&nbsp;&nbsp;分类：</span>
+              {post.category}
             </div>
             <div dangerouslySetInnerHTML={this.createMarkup(post.text)} />
           </Card>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Card, Col, Row, Avatar, Button } from "antd";
 import PropTypes from "prop-types";
 import { deleteComment } from "../../actions/postActions";
 
@@ -7,38 +8,37 @@ class CommentItem extends Component {
   onDeleteClick(postId, commentId) {
     this.props.deleteComment(postId, commentId);
   }
+  createMarkup = htmlcode => ({
+    __html: htmlcode
+  });
 
   render() {
     const { comment, postId, auth } = this.props;
 
     return (
-      <div className="card card-body mb-3">
-        <div className="row">
-          <div className="col-md-2">
+      <Card style={{ margin: "20px 20px" }}>
+        <Row>
+          <Col span={4}>
             <a href="profile.html">
-              <img
-                className="rounded-circle d-none d-md-block"
-                src={comment.avatar}
-                alt=""
-              />
+              <Avatar src={comment.avatar} alt="avatar" />
             </a>
-            <br />
-            <p className="text-center">{comment.name}</p>
-          </div>
-          <div className="col-md-10">
-            <p className="lead">{comment.text}</p>
+            &nbsp;&nbsp;&nbsp;
+            <a>{comment.name}</a>
+          </Col>
+          <Col span={20}>
+            <span dangerouslySetInnerHTML={this.createMarkup(comment.text)} />
             {comment.user === auth.user.id ? (
-              <button
+              <Button
                 onClick={this.onDeleteClick.bind(this, postId, comment._id)}
-                type="button"
-                className="btn btn-danger mr-1"
+                type="danger"
+                style={{ float: "right" }}
               >
-                <i className="fas fa-times" />
-              </button>
+                删除
+              </Button>
             ) : null}
-          </div>
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Card>
     );
   }
 }
