@@ -84,7 +84,10 @@ class PostForm extends Component {
         };
         console.log("Received values of form: ", newPost);
         this.props.addPost(newPost, this.props.history);
-        this.setState({ htmlContent: "" });
+        this.setState({
+          htmlContent: "",
+          editorState: EditorState.createEmpty()
+        });
       }
     });
   };

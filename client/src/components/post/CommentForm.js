@@ -85,7 +85,10 @@ class CommentForm extends Component {
         };
         console.log("Received values of form: ", values);
         this.props.addComment(postId, newComment);
-        this.setState({ htmlContent: "" });
+        this.setState({
+          htmlContent: "",
+          editorState: EditorState.createEmpty()
+        });
       }
     });
   };
@@ -158,22 +161,6 @@ class CommentForm extends Component {
               <Col span={12} />
             </Row>
           </FormItem>
-          {/* <FormItem {...formItemLayout} label="回复">
-            <Row gutter={8}>
-              <Col span={12}>
-                {getFieldDecorator("comment", {
-                  rules: [
-                    {
-                      min: 2,
-                      max: 800,
-                      message: "回复长度必须在2至800个字符之间"
-                    }
-                  ]
-                })(<TextArea placeholder="回复内容" />)}
-              </Col>
-              <Col span={12} />
-            </Row>
-          </FormItem> */}
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
               提交
