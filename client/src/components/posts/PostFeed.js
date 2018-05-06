@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { List, Avatar, Button, Spin, Icon } from "antd";
+import { withRouter } from "react-router-dom";
 import PostItem from "./PostItem";
 import reqwest from "reqwest";
 
@@ -11,8 +12,7 @@ class PostFeed extends Component {
   state = {
     loading: true,
     loadingMore: false,
-    showLoadingMore: true,
-    data: []
+    showLoadingMore: true
   };
   componentDidMount() {
     this.getData(res => {
@@ -33,6 +33,7 @@ class PostFeed extends Component {
       }
     });
   };
+
   onLoadMore = () => {
     this.setState({
       loadingMore: true
@@ -58,14 +59,50 @@ class PostFeed extends Component {
     __html: htmlcode
   });
 
+  onDeleteClick = id => {
+    this.props.deletePost(id);
+  };
+
+  onLikeClick = id => {
+    if (this.props.auth.isAuthenticated === false) {
+      this.props.history.push("/login");
+    }
+    this.props.addLike(id);
+  };
+
+  onUnlikeClick = id => {
+    if (this.props.auth.isAuthenticated === false) {
+      this.props.history.push("/login");
+    }
+    this.props.removeLike(id);
+  };
+
+  findUserLike(likes) {
+    const { auth } = this.props;
+    if (likes.filter(like => like.user === auth.user.id).length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  findUserUnlike(unlikes) {
+    const { auth } = this.props;
+    if (unlikes.filter(unlike => unlike.user === auth.user.id).length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   render() {
     const { posts } = this.props;
     console.log(posts);
-    const { loading, loadingMore, showLoadingMore, data } = this.state;
+    const { loading, loadingMore, showLoadingMore } = this.state;
 
-    const IconText = ({ type, text }) => (
+    const IconText = ({ type, text, onClick }) => (
       <span>
-        <Icon type={type} style={{ marginRight: 8 }} />
+        <Icon type={type} style={{ marginRight: 8 }} onClick={onClick} />
         {text}
       </span>
     );
@@ -89,29 +126,31 @@ class PostFeed extends Component {
     return (
       <List
         loading={loading}
-        itemLayout="vertical"
+        itemLayout="horizental"
         loadMore={loadMore}
         dataSource={posts}
         renderItem={item => (
           <List.Item
             actions={[
-              <IconText type="star-o" text="156" />,
+              // <IconText type="star-o" text="156" />,
+
               <IconText
-                type="like-o"
+                type={this.findUserLike(item.likes) ? "like" : "like-o"}
                 text={item.likes ? item.likes.length : "0"}
+                onClick={e => this.onLikeClick(item._id)}
+              />,
+              <IconText
+                type={
+                  this.findUserUnlike(item.unlikes) ? "dislike" : "dislike-o"
+                }
+                text={item.unlikes ? item.unlikes.length : "0"}
+                onClick={() => this.onUnlikeClick(item._id)}
               />,
               <IconText
                 type="message"
                 text={item.comments ? item.comments.length : "0"}
               />
             ]}
-            extra={
-              <img
-                width={272}
-                alt="album"
-                src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-              />
-            }
           >
             <List.Item.Meta
               avatar={<Avatar src={item.avatar} />}
@@ -123,7 +162,6 @@ class PostFeed extends Component {
         )}
       />
     );
-    // return posts.map(post => <PostItem key={post._id} post={post} />);
   }
 }
 
@@ -131,4 +169,4 @@ PostFeed.propTypes = {
   posts: PropTypes.array.isRequired
 };
 
-export default PostFeed;
+export default withRouter(PostFeed);

@@ -4,26 +4,37 @@ import { connect } from "react-redux";
 import { Carousel, Layout, Spin, Col, Row } from "antd";
 import GlobalSider from "./GlobalSider";
 import PostFeed from "../posts/PostFeed";
-import { getPosts } from "../../actions/postActions";
+import {
+  getPosts,
+  deletePost,
+  addLike,
+  removeLike
+} from "../../actions/postActions";
 
 const { Content } = Layout;
 
 class IndexContent extends Component {
   componentWillMount() {
     this.props.getPosts();
+    // console.log(this.props);
   }
+
   render() {
     const { posts, loading } = this.props.post;
+    const { addLike, deletePost, removeLike, auth } = this.props;
     console.log(this.props.post);
-    let postContent;
-    postContent = <PostFeed posts={posts} />;
-
     return (
       <Content style={{ padding: "0 50px" }}>
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
           <GlobalSider />
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
-            {postContent}
+            <PostFeed
+              posts={posts}
+              addLike={addLike}
+              removeLike={removeLike}
+              deletePost={deletePost}
+              auth={auth}
+            />
           </Content>
         </Layout>
       </Content>
@@ -33,14 +44,24 @@ class IndexContent extends Component {
 
 IndexContent.propTypes = {
   getPosts: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired
+  post: PropTypes.object.isRequired,
+  deletePost: PropTypes.func.isRequired,
+  addLike: PropTypes.func.isRequired,
+  removeLike: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  post: state.post
+  post: state.post,
+  auth: state.auth
 });
 
-export default connect(mapStateToProps, { getPosts })(IndexContent);
+export default connect(mapStateToProps, {
+  getPosts,
+  addLike,
+  removeLike,
+  deletePost
+})(IndexContent);
 
 {
   /* <Carousel autoplay>
