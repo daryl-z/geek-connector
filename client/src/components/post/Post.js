@@ -5,21 +5,7 @@ import PropTypes from "prop-types";
 import CommentForm from "./CommentForm";
 import CommentFeed from "./CommentFeed";
 import Moment from "react-moment";
-import {
-  Form,
-  Input,
-  Tooltip,
-  Icon,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Card,
-  Button,
-  AutoComplete,
-  Layout,
-  Spin
-} from "antd";
+import { Card, Layout, Spin, BackTop } from "antd";
 import { getPost } from "../../actions/postActions";
 
 const { Content } = Layout;
@@ -68,6 +54,7 @@ class Post extends Component {
     return (
       <Content style={{ padding: "0 50px" }}>
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
+          <BackTop />
           <a onClick={this.props.history.goBack} style={{ margin: "0 20px" }}>
             返回上一级
           </a>

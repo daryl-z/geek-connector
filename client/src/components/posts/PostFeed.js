@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { List, Avatar, Button, Spin, Icon, Col, Row } from "antd";
 import { withRouter, Link } from "react-router-dom";
 

@@ -1,19 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link, withRouter } from "react-router-dom";
-import {
-  Form,
-  Input,
-  Icon,
-  Row,
-  Col,
-  Card,
-  Button,
-  Layout,
-  Select
-} from "antd";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
+import { withRouter } from "react-router-dom";
+import { Form, Input, Icon, Row, Col, Card, Button, Select } from "antd";
+import { EditorState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from "draftjs-to-html";
@@ -21,7 +11,6 @@ import draftToHtml from "draftjs-to-html";
 
 import { addPost } from "../../actions/postActions";
 const FormItem = Form.Item;
-const { TextArea } = Input;
 const Option = Select.Option;
 
 class PostForm extends Component {
