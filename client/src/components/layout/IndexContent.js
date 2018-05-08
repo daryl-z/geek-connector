@@ -11,6 +11,8 @@ import {
   removeLike
 } from "../../actions/postActions";
 
+// import "../tagcloud/style.css";
+
 const { Content } = Layout;
 
 class IndexContent extends Component {

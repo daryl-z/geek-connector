@@ -73,14 +73,17 @@ class GlobalHeader extends Component {
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={["4"]}
+          defaultSelectedKeys={["index"]}
           style={{ lineHeight: "64px" }}
         >
-          <Menu.Item key="4">
+          <Menu.Item key="index">
             <Link to="/">首页</Link>
           </Menu.Item>
-          <Menu.Item key="1">
+          <Menu.Item key="developers">
             <Link to="/profiles">开发者们</Link>
+          </Menu.Item>
+          <Menu.Item key="tagcloud">
+            <Link to="/tagcloud">标签云</Link>
           </Menu.Item>
           {isAuthenticated
             ? [authLinks, userAvatar, posts]
