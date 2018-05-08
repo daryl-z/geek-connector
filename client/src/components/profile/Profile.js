@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import ProfileHeader from "./ProfileHeader";
 import ProfileAbout from "./ProfileAbout";
 import ProfileCreds from "./ProfileCreds";
@@ -57,9 +57,10 @@ class Profile extends Component {
     return (
       <Content style={{ padding: "0 50px" }}>
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
-          <Link to="/dashboard" style={{ margin: "0 20px" }}>
-            我的个人中心
-          </Link>
+          <a onClick={this.props.history.goBack} style={{ margin: "0 20px" }}>
+            返回上一级
+          </a>
+
           <Card
             bordered={false}
             style={{ margin: "0 20px" }}
@@ -87,4 +88,6 @@ const mapStateToProps = state => ({
   profile: state.profile
 });
 
-export default connect(mapStateToProps, { getProfileByHandle })(Profile);
+export default connect(mapStateToProps, { getProfileByHandle })(
+  withRouter(Profile)
+);
