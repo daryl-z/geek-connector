@@ -48,7 +48,6 @@ class MyCloud extends Component {
                   className="tag-cloud"
                   style={{
                     fontFamily: "sans-serif",
-                    //fontSize: () => Math.round(Math.random() * 50) + 16,
                     fontSize: 30,
                     color: () =>
                       randomColor({
