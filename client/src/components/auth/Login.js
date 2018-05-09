@@ -111,14 +111,7 @@ class Login extends Component {
             </FormItem>
             <FormItem {...formItemLayout} label="邮箱">
               {getFieldDecorator("email", {
-                rules: [
-                  { required: true, message: "请输入您的邮箱！" },
-                  {
-                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/,
-                    message:
-                      "至少8-16个字符，至少1个大写字母，1个小写字母和1个数字"
-                  }
-                ]
+                rules: [{ required: true, message: "请输入您的邮箱！" }]
               })(
                 <Input
                   prefix={
@@ -131,7 +124,14 @@ class Login extends Component {
 
             <FormItem {...formItemLayout} label="密码">
               {getFieldDecorator("password", {
-                rules: [{ required: true, message: "请输入您的密码！" }]
+                rules: [
+                  { required: true, message: "请输入您的密码！" },
+                  {
+                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/,
+                    message:
+                      "至少8-16个字符，至少1个大写字母，1个小写字母和1个数字"
+                  }
+                ]
               })(
                 <Input
                   prefix={
