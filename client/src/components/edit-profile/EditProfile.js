@@ -56,7 +56,7 @@ class EditProfile extends Component {
 
     if (nextProps.profile.profile) {
       const profile = nextProps.profile.profile;
-      // If profile field doesnt exist, make empty string
+      //如果某项为空则设为空字符串
       profile.company = !isEmpty(profile.company) ? profile.company : "";
       profile.website = !isEmpty(profile.website) ? profile.website : "";
       profile.location = !isEmpty(profile.location) ? profile.location : "";
@@ -79,9 +79,6 @@ class EditProfile extends Component {
         ? profile.social.leetcode
         : "";
 
-      // // Set component fields state
-
-      // Bring skills array back to CSV
       const skillsCSV = profile.skills.join(",");
       this.setState({
         handle: profile.handle,
@@ -100,7 +97,6 @@ class EditProfile extends Component {
       });
     }
   }
-  // // Set component fields state
 
   handleSubmit = e => {
     e.preventDefault();
@@ -131,10 +127,6 @@ class EditProfile extends Component {
   handleChange = value => {
     console.log(`selected ${value}`);
   };
-
-  // onChange(e) {
-  //   this.setState({ [e.target.name]: e.target.value });
-  // }
 
   handleFormChange = changedFields => {
     this.setState(({ fields }) => ({
@@ -204,7 +196,7 @@ class EditProfile extends Component {
                     initialValue: this.state.handle
                   })(
                     <Input
-                      placeholder="简介的唯一标识,可通过url访问该简介"
+                      placeholder="简介的唯一标识,可通过url访问该简介,一旦确定就不可更改。"
                       disabled
                     />
                   )}
@@ -238,7 +230,6 @@ class EditProfile extends Component {
                         学生或者是学习中
                       </Option>
                     </Select>
-                  )}
                   )}
                 </Col>
                 <Col span={12} />
@@ -441,7 +432,8 @@ class EditProfile extends Component {
             <FormItem {...tailFormItemLayout}>
               <Button type="primary" htmlType="submit">
                 提交
-              </Button>
+              </Button>&nbsp;&nbsp;&nbsp;&nbsp;
+              <Button onClick={this.props.history.goBack}>取消</Button>
             </FormItem>
           </Form>
         </Layout>

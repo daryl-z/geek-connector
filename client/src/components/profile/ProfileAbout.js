@@ -8,7 +8,7 @@ class ProfileAbout extends Component {
     const { profile } = this.props;
 
     // Get first name
-    const firstName = profile.user
+    const firstName = profile.user.name
       ? profile.user.name.trim().split(" ")[0]
       : "";
 

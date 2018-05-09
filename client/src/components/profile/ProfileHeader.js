@@ -8,6 +8,8 @@ const { Meta } = Card;
 class ProfileHeader extends Component {
   render() {
     const { profile } = this.props;
+    const transUri2Url = uri =>
+      `${window.location.protocol}//${uri.replace(/^[http|https]+:\/*/i, "")}`;
 
     return (
       <Card style={{ width: "100%" }} bordered={false}>
@@ -25,14 +27,18 @@ class ProfileHeader extends Component {
                 </div>
                 <p>
                   {isEmpty(profile.website) ? null : (
-                    <a href={profile.website} target="_blank" title="website">
+                    <a
+                      href={transUri2Url(profile.website)}
+                      target="_blank"
+                      title="website"
+                    >
                       <Icon type="cloud" />&nbsp;&nbsp;&nbsp;&nbsp;
                     </a>
                   )}
 
                   {isEmpty(profile.social && profile.social.bili) ? null : (
                     <a
-                      href={profile.social.bili}
+                      href={transUri2Url(profile.social.bili)}
                       target="_blank"
                       title="bilibili"
                     >
@@ -42,7 +48,7 @@ class ProfileHeader extends Component {
 
                   {isEmpty(profile.social && profile.social.weibo) ? null : (
                     <a
-                      href={profile.social.weibo}
+                      href={transUri2Url(profile.social.weibo)}
                       target="_blank"
                       title="weibo"
                     >
@@ -58,7 +64,7 @@ class ProfileHeader extends Component {
 
                   {isEmpty(profile.social && profile.social.leetcode) ? null : (
                     <a
-                      href={profile.social.leetcode}
+                      href={transUri2Url(profile.social.leetcode)}
                       target="_blank"
                       title="leetcode"
                     >
@@ -70,7 +76,7 @@ class ProfileHeader extends Component {
                     profile.social && profile.social.stackoverflow
                   ) ? null : (
                     <a
-                      href={profile.social.stackoverflow}
+                      href={transUri2Url(profile.social.stackoverflow)}
                       target="_blank"
                       title="Stack Overflow"
                     >
