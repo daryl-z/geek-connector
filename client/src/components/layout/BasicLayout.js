@@ -44,14 +44,28 @@ if (localStorage.jwtToken) {
 }
 
 export default class BasicLayout extends Component {
+  state = {
+    search: ""
+  };
+
+  onSearch = search => {
+    this.setState({ search: search.trim() });
+  };
+
   render() {
     return (
       <Provider store={store}>
         <Router>
           <div>
             <Layout>
-              <GlobalHeader />
-              <Route exact path="/" component={IndexContent} />
+              <GlobalHeader onSearch={this.onSearch} />
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <IndexContent {...props} search={this.state.search} />
+                )}
+              />
               <div>
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />

@@ -11,8 +11,6 @@ import {
   removeLike
 } from "../../actions/postActions";
 
-// import "../tagcloud/style.css";
-
 const { Content } = Layout;
 
 class IndexContent extends Component {
@@ -22,7 +20,7 @@ class IndexContent extends Component {
 
   render() {
     const { posts } = this.props.post;
-    const { addLike, deletePost, removeLike, auth } = this.props;
+    const { addLike, deletePost, removeLike, auth, search } = this.props;
     console.log(this.props.post);
     return (
       <Content style={{ padding: "0 50px" }}>
@@ -48,7 +46,11 @@ class IndexContent extends Component {
             </Carousel>
 
             <PostFeed
-              posts={posts}
+              posts={
+                search.length <= 0
+                  ? posts
+                  : posts.filter(item => item.title.indexOf(search) !== -1)
+              }
               addLike={addLike}
               removeLike={removeLike}
               deletePost={deletePost}

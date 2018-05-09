@@ -119,9 +119,7 @@ class CreateProfile extends Component {
                         whitespace: true
                       }
                     ]
-                  })(
-                    <Input placeholder="简介的唯一标识,可通过url访问该简介" />
-                  )}
+                  })(<Input placeholder="简介的唯一标识,一旦创建不可更改" />)}
                 </Col>
                 <Col span={12} />
               </Row>

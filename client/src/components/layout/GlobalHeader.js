@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Menu, Avatar, Icon } from "antd";
+import { Layout, Menu, Avatar, Icon, Input } from "antd";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -8,6 +8,7 @@ import { clearCurrentProfile } from "../../actions/profileActions";
 import "./styles.css";
 
 const { Header } = Layout;
+const { Search } = Input;
 class GlobalHeader extends Component {
   onLogoutClick = e => {
     e.preventDefault();
@@ -88,6 +89,13 @@ class GlobalHeader extends Component {
           {isAuthenticated
             ? [authLinks, userAvatar, posts]
             : [registerLink, loginLink]}
+          <Menu.Item key="search">
+            <Search
+              placeholder="请输入关键字"
+              onSearch={this.props.onSearch}
+              style={{ width: "100%" }}
+            />
+          </Menu.Item>
         </Menu>
       </Header>
     );
