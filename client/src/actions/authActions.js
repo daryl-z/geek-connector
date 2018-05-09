@@ -2,8 +2,8 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
-// Register actionCreator
+import { GET_ERRORS, SET_CURRENT_USER, CLEAR_ERRORS } from "./types";
+//注册
 export const registerUser = (userData, history) => dispatch => {
   // 返回的 Action 会由 Redux 自动发出
   axios
@@ -26,11 +26,11 @@ export const loginUser = userData => dispatch => {
       // 保存到localstorage
       const { token } = res.data;
       localStorage.setItem("jwtToken", token);
-      //set token to auth header
+      //设置token到auth header
       setAuthToken(token);
-      // decode token to get user data
+      // 解码token获取用户数据
       const decoded = jwt_decode(token);
-      // set current user
+      // 设置当前用户
       dispatch(setCurrentUser(decoded));
     })
     .catch(err =>
@@ -57,4 +57,11 @@ export const logoutUser = () => dispatch => {
   setAuthToken(false);
   //设置currentuser为{} isAuthenticated false  回到初始state
   dispatch(setCurrentUser({}));
+};
+
+// 清除错误
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
+  };
 };

@@ -7,7 +7,8 @@ import {
   Checkbox,
   Button,
   Layout,
-  Alert
+  Alert,
+  message
 } from "antd";
 // import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
@@ -45,6 +46,11 @@ class Register extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.clearErrors;
+  }
+  s;
+
   renderMessage = content => {
     return (
       <Alert
@@ -60,14 +66,12 @@ class Register extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        // console.log("Received values of form: ", values);
         if (values.agreement !== true) {
-          //需要弹一个提示 不同意协议的不准注册
+          message.info("不好意思，不同意我们的协议是不可以注册的。");
           return;
         }
         // actionCreator mapDispatchToProps
         this.props.registerUser(values, this.props.history);
-        // console.log(this.state.errors);
       }
     });
   };

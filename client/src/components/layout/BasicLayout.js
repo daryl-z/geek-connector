@@ -27,7 +27,7 @@ import Post from "../post/Post";
 import NotFound from "../not-found/NotFound";
 import MyCloud from "../tagcloud/TagCloud";
 
-// check for token
+// 检查token
 if (localStorage.jwtToken) {
   // 设置头部验证
   setAuthToken(localStorage.jwtToken);

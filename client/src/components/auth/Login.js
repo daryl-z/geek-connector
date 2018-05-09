@@ -40,6 +40,10 @@ class Login extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.clearErrors;
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -132,12 +136,12 @@ class Login extends Component {
               )}
             </FormItem>
 
-            <FormItem {...tailFormItemLayout}>
+            {/* <FormItem {...tailFormItemLayout}>
               {getFieldDecorator("remember", {
                 valuePropName: "checked",
                 initialValue: true
               })(<Checkbox>记住我</Checkbox>)}
-            </FormItem>
+            </FormItem> */}
 
             <FormItem {...tailFormItemLayout}>
               <Button type="primary" htmlType="submit">
