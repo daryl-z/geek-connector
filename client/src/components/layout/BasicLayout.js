@@ -33,8 +33,11 @@ if (localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
   // 解码token获取用户信息
   const decoded = jwt_decode(localStorage.jwtToken);
+
   store.dispatch(setCurrentUser(decoded));
+
   const currentTime = Date.now() / 1000;
+
   if (decoded.exp < currentTime) {
     // 登出并移除简介
     store.dispatch(logoutUser());
@@ -45,11 +48,17 @@ if (localStorage.jwtToken) {
 
 export default class BasicLayout extends Component {
   state = {
-    search: ""
+    search: "",
+    searchVisible: false
   };
 
   onSearch = search => {
     this.setState({ search: search.trim() });
+  };
+
+  changeSearchVisible = value => {
+    console.log(`zzz${value}`);
+    this.setState({ searchVisible: value });
   };
 
   render() {
@@ -58,12 +67,19 @@ export default class BasicLayout extends Component {
         <Router>
           <div>
             <Layout>
-              <GlobalHeader onSearch={this.onSearch} />
+              <GlobalHeader
+                onSearch={this.onSearch}
+                searchVisible={this.state.searchVisible}
+              />
               <Route
                 exact
                 path="/"
                 render={props => (
-                  <IndexContent {...props} search={this.state.search} />
+                  <IndexContent
+                    {...props}
+                    search={this.state.search}
+                    changeSearchVisible={this.changeSearchVisible}
+                  />
                 )}
               />
               <div>

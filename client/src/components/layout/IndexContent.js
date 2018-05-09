@@ -14,10 +14,17 @@ import {
 const { Content } = Layout;
 
 class IndexContent extends Component {
+  state = {
+    searchVisible: true
+  };
   componentWillMount() {
     this.props.getPosts();
+    this.props.changeSearchVisible(true);
   }
 
+  componentWillUnmount() {
+    this.props.changeSearchVisible(false);
+  }
   render() {
     const { posts } = this.props.post;
     const { addLike, deletePost, removeLike, auth, search } = this.props;

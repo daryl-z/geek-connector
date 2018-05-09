@@ -10,6 +10,10 @@ import "./styles.css";
 const { Header } = Layout;
 const { Search } = Input;
 class GlobalHeader extends Component {
+  // state = {
+  //   href: window.location.href.substr(window.location.href.lastIndexOf("/") + 1)
+  // };
+
   onLogoutClick = e => {
     e.preventDefault();
     // 清空用户简介 登出
@@ -18,6 +22,7 @@ class GlobalHeader extends Component {
   };
 
   render() {
+    console.log(`propsheader${this.props.searchVisible}`);
     const { isAuthenticated, user } = this.props.auth;
     const registerLink = (
       <Menu.Item key="3" style={{ float: "right" }}>
@@ -89,13 +94,17 @@ class GlobalHeader extends Component {
           {isAuthenticated
             ? [authLinks, userAvatar, posts]
             : [registerLink, loginLink]}
-          <Menu.Item key="search">
-            <Search
-              placeholder="请输入关键字"
-              onSearch={this.props.onSearch}
-              style={{ width: "100%" }}
-            />
-          </Menu.Item>
+          {this.props.searchVisible ? (
+            <Menu.Item key="search">
+              <Search
+                placeholder="请输入关键字"
+                onSearch={this.props.onSearch}
+                style={{ width: "100%" }}
+              />
+            </Menu.Item>
+          ) : (
+            ""
+          )}
         </Menu>
       </Header>
     );

@@ -48,7 +48,6 @@ class Login extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        // console.log("Received values of form: ", values);
         this.props.loginUser(values);
       }
     });
@@ -91,7 +90,7 @@ class Login extends Component {
         }
       }
     };
-    // console.log(errors);
+
     return (
       <Content style={{ padding: "0 50px" }}>
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
