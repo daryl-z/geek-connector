@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 // 创建帖子分类Schema
 const CategorySchema = new Schema({
-  user: {
+  category: {
     type: [String]
   }
 });

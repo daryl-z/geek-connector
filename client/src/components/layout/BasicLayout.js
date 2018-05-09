@@ -26,6 +26,7 @@ import Posts from "../posts/Posts";
 import Post from "../post/Post";
 import NotFound from "../not-found/NotFound";
 import MyCloud from "../tagcloud/TagCloud";
+import AdminDashboard from "../admin/AdminDashboard";
 
 // 检查token
 if (localStorage.jwtToken) {
@@ -88,6 +89,7 @@ export default class BasicLayout extends Component {
                 <Route exact path="/profiles" component={Profiles} />
                 <Route exact path="/profile/:handle" component={Profile} />
                 <Route exact path="/tagcloud" component={MyCloud} />
+                <Route exact path="/admin" component={AdminDashboard} />
                 <Switch>
                   <PrivateRoute exact path="/dashboard" component={Dashboard} />
                 </Switch>

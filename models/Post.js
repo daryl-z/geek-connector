@@ -21,6 +21,10 @@ const PostSchema = new Schema({
     type: String,
     default: "其它"
   },
+  tags: {
+    type: [String]
+    // required: true
+  },
   avatar: {
     type: String
   },
