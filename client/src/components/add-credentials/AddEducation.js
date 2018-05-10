@@ -47,7 +47,7 @@ class AddEducation extends Component {
             from: rangeValue[0].format("YYYY-MM-DD"),
             to: rangeValue[1].format("YYYY-MM-DD")
           };
-          console.log("Received values of form: ", values);
+          // console.log("Received values of form: ", values);
           this.props.addEducation(values, this.props.history);
         } else if (this.state.current === true) {
           const rangeValue = fieldsValue["range-picker"];
@@ -67,8 +67,8 @@ class AddEducation extends Component {
     this.setState(
       {
         current: !this.state.current
-      },
-      console.log(this.state.current)
+      }
+      // console.log(this.state.current)
     );
   };
 

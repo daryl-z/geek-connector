@@ -10,33 +10,39 @@ import "./styles.css";
 const { Header } = Layout;
 const { Search } = Input;
 class GlobalHeader extends Component {
-  // state = {
-  //   href: window.location.href.substr(window.location.href.lastIndexOf("/") + 1)
-  // };
+  state = {
+    href: window.location.href.substr(window.location.href.lastIndexOf("/") + 1)
+  };
 
   onLogoutClick = e => {
     e.preventDefault();
     // 清空用户简介 登出
     this.props.clearCurrentProfile();
     this.props.logoutUser();
+    window.location = "/login";
   };
 
   render() {
-    console.log(`propsheader${this.props.searchVisible}`);
+    let url = window.location.href.substr(
+      window.location.href.lastIndexOf("/") + 1
+    );
+
+    const { href } = this.state;
+    let selectedKey = href === "" ? "index" : url;
     const { isAuthenticated, user } = this.props.auth;
     const registerLink = (
-      <Menu.Item key="3" style={{ float: "right" }}>
+      <Menu.Item key="register" style={{ float: "right" }}>
         <Link to="/register">注册</Link>
       </Menu.Item>
     );
     const loginLink = (
-      <Menu.Item key="5" style={{ float: "right" }}>
+      <Menu.Item key="login" style={{ float: "right" }}>
         <Link to="/login">登录</Link>
       </Menu.Item>
     );
 
     const authLinks = (
-      <Menu.Item key="3" style={{ float: "right" }}>
+      <Menu.Item key="login" style={{ float: "right" }}>
         <Link
           to="/login"
           onClick={this.onLogoutClick}
@@ -79,13 +85,13 @@ class GlobalHeader extends Component {
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={["index"]}
+          defaultSelectedKeys={[selectedKey]}
           style={{ lineHeight: "64px" }}
         >
           <Menu.Item key="index">
             <Link to="/">首页</Link>
           </Menu.Item>
-          <Menu.Item key="developers">
+          <Menu.Item key="profiles">
             <Link to="/profiles">开发者们</Link>
           </Menu.Item>
           <Menu.Item key="tagcloud">

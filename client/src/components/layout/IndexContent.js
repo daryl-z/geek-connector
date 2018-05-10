@@ -28,7 +28,7 @@ class IndexContent extends Component {
   render() {
     const { posts } = this.props.post;
     const { addLike, deletePost, removeLike, auth, search } = this.props;
-    console.log(this.props.post);
+    // console.log(this.props.post);
     return (
       <Content style={{ padding: "0 50px" }}>
         <BackTop />

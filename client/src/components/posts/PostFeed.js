@@ -4,56 +4,11 @@ import { withRouter, Link } from "react-router-dom";
 
 import reqwest from "reqwest";
 
-const fakeDataUrl =
-  "https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo";
-
 class PostFeed extends Component {
   state = {
     loading: true,
-    loadingMore: false,
-    showLoadingMore: true
-  };
-
-  componentDidMount() {
-    this.getData(res => {
-      this.setState({
-        loading: false,
-        data: res.results
-      });
-    });
-  }
-
-  getData = callback => {
-    reqwest({
-      url: fakeDataUrl,
-      type: "json",
-      method: "get",
-      contentType: "application/json",
-      success: res => {
-        callback(res);
-      }
-    });
-  };
-
-  onLoadMore = () => {
-    this.setState({
-      loadingMore: true
-    });
-    this.getData(res => {
-      const data = this.state.data.concat(res.results);
-      this.setState(
-        {
-          data,
-          loadingMore: false
-        },
-        () => {
-          // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
-          // In real scene, you can using public method of react-virtualized:
-          // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
-          window.dispatchEvent(new Event("resize"));
-        }
-      );
-    });
+    currentData: [],
+    current: 1
   };
 
   createMarkup = htmlcode => ({
@@ -98,8 +53,21 @@ class PostFeed extends Component {
 
   render() {
     let { posts } = this.props;
-    console.log(posts);
-    const { loading, loadingMore, showLoadingMore } = this.state;
+    const { loading, current, currentData } = this.state;
+
+    // List分页
+    const pagination = {
+      pageSize: 1,
+      current: this.state.current,
+      total: posts.length,
+      onChange: (page, pageSize) => {
+        let start = (page - 1) * pageSize;
+        this.setState({
+          currentData: posts.slice(start, start + pageSize),
+          current: page
+        });
+      }
+    };
 
     const IconText = ({ type, text, onClick }) => (
       <span>
@@ -108,28 +76,12 @@ class PostFeed extends Component {
       </span>
     );
 
-    const loadMore = showLoadingMore ? (
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: 12,
-          height: 32,
-          lineHeight: "32px"
-        }}
-      >
-        {loadingMore && <Spin />}
-        {!loadingMore && (
-          <Button onClick={this.onLoadMore}>点击加载更多</Button>
-        )}
-      </div>
-    ) : null;
-
-    return posts ? (
+    return currentData ? (
       <List
-        loading={loading}
+        // loading={loading}
+        pagination={pagination}
         itemLayout="horizental"
-        loadMore={loadMore}
-        dataSource={posts}
+        dataSource={currentData.length === 0 ? posts.slice(0, 1) : currentData}
         renderItem={item => (
           <List.Item
             actions={[

@@ -58,7 +58,7 @@ export default class BasicLayout extends Component {
   };
 
   changeSearchVisible = value => {
-    console.log(`zzz${value}`);
+    // console.log(`zzz${value}`);
     this.setState({ searchVisible: value });
   };
 
