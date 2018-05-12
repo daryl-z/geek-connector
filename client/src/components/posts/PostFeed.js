@@ -1,16 +1,10 @@
 import React, { Component } from "react";
 import { List, Avatar, Button, Spin, Icon, Col, Row } from "antd";
 import { withRouter, Link } from "react-router-dom";
-
-import reqwest from "reqwest";
-
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { setCurrentData, setCurrentPage } from "../../actions/postActions";
 class PostFeed extends Component {
-  state = {
-    loading: true,
-    currentData: [],
-    current: 1
-  };
-
   createMarkup = htmlcode => ({
     __html: htmlcode
   });
@@ -53,19 +47,17 @@ class PostFeed extends Component {
 
   render() {
     let { posts } = this.props;
-    const { loading, current, currentData } = this.state;
-
+    const { setCurrentData, setCurrentPage } = this.props;
+    const { current, currentData } = this.props.post;
     // List分页
     const pagination = {
-      pageSize: 1,
-      current: this.state.current,
-      total: posts.length,
+      pageSize: 5,
+      current: current,
+      total: posts ? posts.length : 0,
       onChange: (page, pageSize) => {
         let start = (page - 1) * pageSize;
-        this.setState({
-          currentData: posts.slice(start, start + pageSize),
-          current: page
-        });
+        setCurrentData(posts.slice(start, start + pageSize));
+        setCurrentPage(page);
       }
     };
 
@@ -78,10 +70,9 @@ class PostFeed extends Component {
 
     return currentData ? (
       <List
-        // loading={loading}
         pagination={pagination}
         itemLayout="horizental"
-        dataSource={currentData.length === 0 ? posts.slice(0, 1) : currentData}
+        dataSource={currentData.length === 0 ? posts.slice(0, 5) : currentData}
         renderItem={item => (
           <List.Item
             actions={[
@@ -136,4 +127,15 @@ class PostFeed extends Component {
     );
   }
 }
-export default withRouter(PostFeed);
+
+PostFeed.propTypes = {
+  setCurrentData: PropTypes.func.isRequired,
+  setCurrentPage: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  post: state.post
+});
+export default connect(mapStateToProps, { setCurrentData, setCurrentPage })(
+  withRouter(PostFeed)
+);

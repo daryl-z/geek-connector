@@ -15,3 +15,5 @@ export const GET_POSTS = "GET_POSTS";
 export const GET_POST = "GET_POST";
 export const ADD_POST = "ADD_POST";
 export const DELETE_POST = "DELETE_POST";
+export const SET_CURRENT_DATA = "SET_CURRENT_DATA";
+export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";

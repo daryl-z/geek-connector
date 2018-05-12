@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import { Layout } from "antd";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Provider } from "react-redux";
-import jwt_decode from "jwt-decode";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-import setAuthToken from "../../utils/setAuthToken";
-import { logoutUser } from "../../actions/authActions";
-import { setCurrentUser } from "../../actions/authActions";
-import { clearCurrentProfile } from "../../actions/profileActions";
-import store from "../../store";
+import { setCurrentData, setCurrentPage } from "../../actions/postActions";
 import GlobalHeader from "./GlobalHeader";
 import IndexContent from "./IndexContent";
 import GlobalFooter from "./GlobalFooter";
@@ -28,112 +24,106 @@ import NotFound from "../not-found/NotFound";
 import MyCloud from "../tagcloud/TagCloud";
 import AdminDashboard from "../admin/AdminDashboard";
 
-// 检查token
-if (localStorage.jwtToken) {
-  // 设置头部验证
-  setAuthToken(localStorage.jwtToken);
-  // 解码token获取用户信息
-  const decoded = jwt_decode(localStorage.jwtToken);
-
-  store.dispatch(setCurrentUser(decoded));
-
-  const currentTime = Date.now() / 1000;
-
-  if (decoded.exp < currentTime) {
-    // 登出并移除简介
-    store.dispatch(logoutUser());
-    store.dispatch(clearCurrentProfile());
-    window.location.href = "/login";
-  }
-}
-
-export default class BasicLayout extends Component {
+class BasicLayout extends Component {
   state = {
     search: "",
     searchVisible: false
   };
 
   onSearch = search => {
+    const { setCurrentData, setCurrentPage } = this.props;
     this.setState({ search: search.trim() });
+    setCurrentData([]);
+    setCurrentPage(1);
   };
 
   changeSearchVisible = value => {
-    // console.log(`zzz${value}`);
     this.setState({ searchVisible: value });
   };
 
   render() {
     return (
-      <Provider store={store}>
-        <Router>
-          <div>
-            <Layout>
-              <GlobalHeader
-                onSearch={this.onSearch}
-                searchVisible={this.state.searchVisible}
-              />
-              <Route
-                exact
-                path="/"
-                render={props => (
-                  <IndexContent
-                    {...props}
-                    search={this.state.search}
-                    changeSearchVisible={this.changeSearchVisible}
-                  />
-                )}
-              />
-              <div>
-                <Route exact path="/register" component={Register} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/profiles" component={Profiles} />
-                <Route exact path="/profile/:handle" component={Profile} />
-                <Route exact path="/tagcloud" component={MyCloud} />
-                <Route exact path="/admin" component={AdminDashboard} />
-                <Switch>
-                  <PrivateRoute exact path="/dashboard" component={Dashboard} />
-                </Switch>
-                <Switch>
-                  <PrivateRoute
-                    exact
-                    path="/create-profile"
-                    component={CreateProfile}
-                  />
-                </Switch>
-                <Switch>
-                  <PrivateRoute
-                    exact
-                    path="/edit-profile"
-                    component={EditProfile}
-                  />
-                </Switch>
-                <Switch>
-                  <PrivateRoute
-                    exact
-                    path="/add-experience"
-                    component={AddExperience}
-                  />
-                </Switch>
-                <Switch>
-                  <PrivateRoute
-                    exact
-                    path="/add-education"
-                    component={AddEducation}
-                  />
-                </Switch>
-                <Switch>
-                  <PrivateRoute exact path="/feed" component={Posts} />
-                </Switch>
-                <Switch>
-                  <PrivateRoute exact path="/post/:id" component={Post} />
-                </Switch>
-                <Route exact path="/not-found" component={NotFound} />
-              </div>
-              <GlobalFooter />
-            </Layout>
-          </div>
-        </Router>
-      </Provider>
+      <Router>
+        <div>
+          <Layout>
+            <GlobalHeader
+              onSearch={this.onSearch}
+              searchVisible={this.state.searchVisible}
+            />
+            <Route
+              exact
+              path="/"
+              render={props => (
+                <IndexContent
+                  {...props}
+                  search={this.state.search}
+                  changeSearchVisible={this.changeSearchVisible}
+                />
+              )}
+            />
+            <div>
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/profiles" component={Profiles} />
+              <Route exact path="/profile/:handle" component={Profile} />
+              <Route exact path="/tagcloud" component={MyCloud} />
+              <Route exact path="/admin" component={AdminDashboard} />
+              <Switch>
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/create-profile"
+                  component={CreateProfile}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/edit-profile"
+                  component={EditProfile}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/add-experience"
+                  component={AddExperience}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/add-education"
+                  component={AddEducation}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/feed" component={Posts} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/post/:id" component={Post} />
+              </Switch>
+              <Route exact path="/not-found" component={NotFound} />
+            </div>
+            <GlobalFooter />
+          </Layout>
+        </div>
+      </Router>
     );
   }
 }
+
+BasicLayout.propTypes = {
+  setCurrentData: PropTypes.func.isRequired,
+  setCurrentPage: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  post: state.post
+});
+
+export default connect(mapStateToProps, { setCurrentData, setCurrentPage })(
+  BasicLayout
+);

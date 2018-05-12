@@ -3,13 +3,17 @@ import {
   GET_POSTS,
   GET_POST,
   DELETE_POST,
-  POST_LOADING
+  POST_LOADING,
+  SET_CURRENT_DATA,
+  SET_CURRENT_PAGE
 } from "../actions/types";
 
 const initialState = {
   posts: [],
   post: {},
-  loading: false
+  loading: false,
+  currentData: [],
+  current: 1
 };
 
 export default function(state = initialState, action) {
@@ -40,6 +44,16 @@ export default function(state = initialState, action) {
       return {
         ...state,
         posts: state.posts.filter(post => post._id !== action.payload)
+      };
+    case SET_CURRENT_DATA:
+      return {
+        ...state,
+        currentData: action.payload
+      };
+    case SET_CURRENT_PAGE:
+      return {
+        ...state,
+        current: action.payload
       };
     default:
       return state;

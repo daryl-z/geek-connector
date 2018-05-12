@@ -7,7 +7,9 @@ import {
   GET_POSTS,
   GET_POST,
   POST_LOADING,
-  DELETE_POST
+  DELETE_POST,
+  SET_CURRENT_PAGE,
+  SET_CURRENT_DATA
 } from "./types";
 
 // 发帖
@@ -47,6 +49,21 @@ export const getPosts = () => dispatch => {
         payload: null
       })
     );
+};
+
+//
+export const setCurrentData = currentData => dispatch => {
+  dispatch({
+    type: SET_CURRENT_DATA,
+    payload: currentData
+  });
+};
+
+export const setCurrentPage = current => dispatch => {
+  dispatch({
+    type: SET_CURRENT_PAGE,
+    payload: current
+  });
 };
 
 // 通过id获取帖子
