@@ -72,7 +72,13 @@ class PostFeed extends Component {
       <List
         pagination={pagination}
         itemLayout="horizental"
-        dataSource={currentData.length === 0 ? posts.slice(0, 5) : currentData}
+        dataSource={
+          currentData.length === 0
+            ? posts
+              ? posts.slice(0, 5)
+              : []
+            : currentData
+        }
         renderItem={item => (
           <List.Item
             actions={[

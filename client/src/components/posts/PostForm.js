@@ -2,7 +2,18 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Form, Input, Icon, Row, Col, Card, Button, Select } from "antd";
+import {
+  Form,
+  Input,
+  Icon,
+  Row,
+  Col,
+  Card,
+  Button,
+  Select,
+  Tag,
+  Tooltip
+} from "antd";
 import { EditorState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -19,9 +30,43 @@ class PostForm extends Component {
     this.state = {
       errors: {},
       editorState: EditorState.createEmpty(),
-      htmlContent: ""
+      htmlContent: "",
+      tags: [],
+      inputVisible: false,
+      inputValue: ""
     };
   }
+
+  handleClose = removedTag => {
+    const tags = this.state.tags.filter(tag => tag !== removedTag);
+    console.log(tags);
+    this.setState({ tags });
+  };
+
+  showInput = () => {
+    this.setState({ inputVisible: true }, () => this.input.focus());
+  };
+
+  handleInputChange = e => {
+    this.setState({ inputValue: e.target.value });
+  };
+
+  handleInputConfirm = () => {
+    const state = this.state;
+    const inputValue = state.inputValue;
+    let tags = state.tags;
+    if (inputValue && tags.indexOf(inputValue) === -1) {
+      tags = [...tags, inputValue];
+    }
+    console.log(tags);
+    this.setState({
+      tags,
+      inputVisible: false,
+      inputValue: ""
+    });
+  };
+
+  saveInputRef = input => (this.input = input);
 
   onEditorStateChange = editorState => {
     this.setState(
@@ -55,6 +100,7 @@ class PostForm extends Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.errors) {
+      console.log(newProps.errors);
       this.setState({ errors: newProps.errors });
     }
   }
@@ -64,13 +110,14 @@ class PostForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const { user } = this.props.auth;
-
+        console.log(user);
         const newPost = {
           category: values.category,
           title: values.title,
           text: this.state.htmlContent,
           name: user.name,
-          avatar: user.avatar
+          avatar: user.avatar,
+          tags: this.state.tags
         };
         console.log("Received values of form: ", newPost);
         this.props.addPost(newPost, this.props.history);
@@ -84,7 +131,7 @@ class PostForm extends Component {
 
   render() {
     const { errors, editorState } = this.state;
-
+    const { tags, inputVisible, inputValue } = this.state;
     const { getFieldDecorator } = this.props.form;
 
     const formItemLayout = {
@@ -172,6 +219,59 @@ class PostForm extends Component {
               <Col span={12} />
             </Row>
           </FormItem>
+          <FormItem {...formItemLayout} label="标签">
+            <Row gutter={8}>
+              <Col span={12}>
+                {getFieldDecorator("tags", {
+                  rules: []
+                })(
+                  <div>
+                    {tags.map((tag, index) => {
+                      const isLongTag = tag.length > 20;
+                      const tagElem = (
+                        <Tag
+                          key={tag}
+                          closable={index !== 0}
+                          afterClose={() => this.handleClose(tag)}
+                        >
+                          {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                        </Tag>
+                      );
+                      return isLongTag ? (
+                        <Tooltip title={tag} key={tag}>
+                          {tagElem}
+                        </Tooltip>
+                      ) : (
+                        tagElem
+                      );
+                    })}
+                    {inputVisible && (
+                      <Input
+                        ref={this.saveInputRef}
+                        type="text"
+                        size="small"
+                        style={{ width: 78 }}
+                        value={inputValue}
+                        onChange={this.handleInputChange}
+                        onBlur={this.handleInputConfirm}
+                        onPressEnter={this.handleInputConfirm}
+                      />
+                    )}
+                    {!inputVisible && (
+                      <Tag
+                        onClick={this.showInput}
+                        style={{ background: "#fff", borderStyle: "dashed" }}
+                      >
+                        <Icon type="plus" /> New Tag
+                      </Tag>
+                    )}
+                  </div>
+                )}
+              </Col>
+              <Col span={12} />
+            </Row>
+          </FormItem>
+
           <FormItem {...formItemLayout} label="帖子内容">
             <Row gutter={8}>
               <Col span={12}>

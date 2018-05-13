@@ -23,7 +23,6 @@ const PostSchema = new Schema({
   },
   tags: {
     type: [String]
-    // required: true
   },
   avatar: {
     type: String

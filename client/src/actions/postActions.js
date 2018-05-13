@@ -176,6 +176,7 @@ export const setPostLoading = () => {
 // 清除错误
 export const clearErrors = () => {
   return {
-    type: CLEAR_ERRORS
+    type: CLEAR_ERRORS,
+    payload: {}
   };
 };
