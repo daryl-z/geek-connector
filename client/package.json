@@ -11,6 +11,7 @@
     "html-to-draftjs": "^1.4.0",
     "json-loader": "^0.5.7",
     "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.10",
     "randomcolor": "^0.5.3",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
