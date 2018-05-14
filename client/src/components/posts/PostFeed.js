@@ -86,6 +86,7 @@ class PostFeed extends Component {
                 type={this.findUserLike(item.likes) ? "like" : "like-o"}
                 text={item.likes ? item.likes.length : "0"}
                 onClick={e => this.onLikeClick(item._id)}
+                style={{ zIndex: "200" }}
               />,
               <IconText
                 type={
