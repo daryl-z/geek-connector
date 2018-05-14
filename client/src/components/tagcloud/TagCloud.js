@@ -52,13 +52,26 @@ class MyCloud extends Component {
     return _.uniq(this.flatten(tagList));
   };
 
+  showPostList = value => {
+    console.log(value);
+    let filterList = this.props.post.posts.filter(
+      post => post.tags.includes(value) === true
+    );
+    console.log(filterList);
+  };
+
   render() {
     const { posts } = this.props.post;
+    // get all tags
     let allTags = this.getAllTags();
     const tagList = [];
     for (let i = 0; i < allTags.length; i++) {
       tagList.push(
-        <div value={allTags[i]} key={i.toString() + i}>
+        <div
+          value={allTags[i]}
+          key={i.toString() + i}
+          onClick={() => this.showPostList(allTags[i])}
+        >
           {allTags[i]}
         </div>
       );
