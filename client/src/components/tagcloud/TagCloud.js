@@ -132,16 +132,16 @@ class MyCloud extends Component {
     const { current, currentData } = this.props.post;
     let { tagFilterList, tagCloudVisible } = this.state;
     // List分页
-    const pagination = {
-      pageSize: 5,
-      current: current,
-      total: posts ? posts.length : 0,
-      onChange: (page, pageSize) => {
-        let start = (page - 1) * pageSize;
-        setCurrentData(posts.slice(start, start + pageSize));
-        setCurrentPage(page);
-      }
-    };
+    // const pagination = {
+    //   pageSize: 5,
+    //   current: current,
+    //   total: posts ? posts.length : 0,
+    //   onChange: (page, pageSize) => {
+    //     let start = (page - 1) * pageSize;
+    //     setCurrentData(posts.slice(start, start + pageSize));
+    //     setCurrentPage(page);
+    //   }
+    // };
 
     const IconText = ({ type, text, onClick }) => (
       <span>
@@ -176,7 +176,7 @@ class MyCloud extends Component {
           >
             {tagFilterList.length > 0 ? (
               <List
-                pagination={pagination}
+                // pagination={pagination}
                 itemLayout="horizental"
                 dataSource={
                   currentData.length === 0

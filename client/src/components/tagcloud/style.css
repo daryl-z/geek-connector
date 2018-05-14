@@ -19,7 +19,7 @@ h1 {
 
 .app-outer {
   align-items: center;
-  /* bottom: 0; */
+  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,7 +33,7 @@ h1 {
 .app-inner {
   display: flex;
   flex-direction: column;
-  height: 700px;
+  height: 100%;
   max-width: 1000px;
   width: 100%;
 }
