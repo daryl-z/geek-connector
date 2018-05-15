@@ -41,6 +41,28 @@ export const loginUser = userData => dispatch => {
     );
 };
 
+export const loginAdmin = userData => dispatch => {
+  axios
+    .post("/api/users/admin/login", userData)
+    .then(res => {
+      // 保存到localstorage
+      const { token } = res.data;
+      localStorage.setItem("jwtToken", token);
+      //设置token到auth header
+      setAuthToken(token);
+      // 解码token获取用户数据
+      const decoded = jwt_decode(token);
+      // 设置当前用户
+      dispatch(setCurrentUser(decoded));
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
 //设置当前用户
 export const setCurrentUser = decoded => {
   return {

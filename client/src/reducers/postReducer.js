@@ -13,7 +13,8 @@ const initialState = {
   post: {},
   loading: false,
   currentData: [],
-  current: 1
+  current: 1,
+  category: []
 };
 
 export default function(state = initialState, action) {
@@ -54,6 +55,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         current: action.payload
+      };
+    case GET_CATEGORY:
+      return {
+        ...state,
+        category: action.payload
       };
     default:
       return state;

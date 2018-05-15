@@ -17,3 +17,4 @@ export const ADD_POST = "ADD_POST";
 export const DELETE_POST = "DELETE_POST";
 export const SET_CURRENT_DATA = "SET_CURRENT_DATA";
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
+export const GET_CATEGORY = "GET_CATEGORY";

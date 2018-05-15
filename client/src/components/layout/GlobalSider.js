@@ -12,69 +12,28 @@ class GlobalSider extends Component {
       <Sider width={200} style={{ background: "#fff" }}>
         <Menu
           mode="inline"
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
+          // defaultSelectedKeys={["dashboard"]}
+          // defaultOpenKeys={["sub1"]}
           style={{ height: "100%" }}
         >
+          <Menu.Item key="dashboard">
+            <Link to="/admin">
+              <Icon type="laptop" />
+              Dashboard
+            </Link>
+          </Menu.Item>
           <SubMenu
             key="sub2"
             title={
               <span>
-                <Icon type="user" />用户
+                <Icon type="laptop" />帖子管理
               </span>
             }
           >
-            <Menu.Item key="5">
-              <Link to="/dashboard">个人中心</Link>
+            <Menu.Item key="tagmanage">
+              <Link to="/admin/tag-manage">标签管理</Link>
             </Menu.Item>
-            <Menu.Item key="6">帖子管理</Menu.Item>
-            <Menu.Item key="7">教育信息</Menu.Item>
-            <Menu.Item key="8">工作经历</Menu.Item>
           </SubMenu>
-          <SubMenu
-            key="sub1"
-            title={
-              <span>
-                <Icon type="laptop" />前端
-              </span>
-            }
-          >
-            <Menu.Item key="1">HTML/CSS</Menu.Item>
-            <Menu.Item key="3">JavaScript</Menu.Item>
-            <Menu.Item key="2">React</Menu.Item>
-            <Menu.Item key="4">Vue</Menu.Item>
-          </SubMenu>
-
-          <SubMenu
-            key="sub3"
-            title={
-              <span>
-                <Icon type="laptop" />后端
-              </span>
-            }
-          >
-            <Menu.Item key="9">Java</Menu.Item>
-            <Menu.Item key="10">Node.js</Menu.Item>
-            <Menu.Item key="11">PHP</Menu.Item>
-            <Menu.Item key="12">Python</Menu.Item>
-          </SubMenu>
-
-          <SubMenu
-            key="sub4"
-            title={
-              <span>
-                <Icon type="laptop" />热门
-              </span>
-            }
-          >
-            <Menu.Item key="13">大数据</Menu.Item>
-            <Menu.Item key="14">人工智能</Menu.Item>
-            <Menu.Item key="15">机器学习</Menu.Item>
-            <Menu.Item key="16">计算机视觉</Menu.Item>
-          </SubMenu>
-          <Menu.Item key="qita">
-            <Icon type="laptop" />其它
-          </Menu.Item>
         </Menu>
       </Sider>
     );

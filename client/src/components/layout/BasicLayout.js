@@ -23,6 +23,8 @@ import Post from "../post/Post";
 import NotFound from "../not-found/NotFound";
 import MyCloud from "../tagcloud/TagCloud";
 import AdminDashboard from "../admin/AdminDashboard";
+import AdminLogin from "../admin/AdminLogin";
+import TagManage from "../admin/TagManage";
 
 class BasicLayout extends Component {
   state = {
@@ -68,6 +70,8 @@ class BasicLayout extends Component {
               <Route exact path="/profile/:handle" component={Profile} />
               <Route exact path="/tagcloud" component={MyCloud} />
               <Route exact path="/admin" component={AdminDashboard} />
+              <Route exact path="/admin/login" component={AdminLogin} />
+              <Route exact path="/admin/tag-manage" component={TagManage} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>

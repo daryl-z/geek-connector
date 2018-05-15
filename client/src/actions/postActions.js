@@ -9,7 +9,8 @@ import {
   POST_LOADING,
   DELETE_POST,
   SET_CURRENT_PAGE,
-  SET_CURRENT_DATA
+  SET_CURRENT_DATA,
+  GET_CATEGORY
 } from "./types";
 
 // 发帖
@@ -46,6 +47,25 @@ export const getPosts = () => dispatch => {
     .catch(err =>
       dispatch({
         type: GET_POSTS,
+        payload: null
+      })
+    );
+};
+
+// 获取分类列表
+export const getCategory = () => dispatch => {
+  dispatch(setPostLoading());
+  axios
+    .get("/api/admin/category")
+    .then(res =>
+      dispatch({
+        type: GET_CATEGORY,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_CATEGORY,
         payload: null
       })
     );
