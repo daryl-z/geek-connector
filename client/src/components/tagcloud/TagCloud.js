@@ -57,6 +57,9 @@ class MyCloud extends Component {
   // get all tags
   getAllTags = () => {
     let tagList = Array.of();
+    if (!this.props.post) {
+      return [];
+    }
     this.props.post.posts.map(item => tagList.push(item.tags));
     return _.uniq(this.flatten(tagList));
   };

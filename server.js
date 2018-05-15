@@ -6,6 +6,7 @@ const path = require("path");
 const users = require("./routes/api/users");
 const profile = require("./routes/api/profile");
 const posts = require("./routes/api/posts");
+const admin = require("./routes/api/admin");
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,6 +34,7 @@ require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/posts", posts);
 app.use("/api/profile", profile);
+app.use("/api/admin", admin);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server Running On Port ${port}...`));

@@ -33,7 +33,7 @@ class IndexContent extends Component {
       <Content style={{ padding: "0 50px" }}>
         <BackTop />
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
-          <GlobalSider />
+          {/* <GlobalSider /> */}
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
             <Carousel autoplay>
               <div>

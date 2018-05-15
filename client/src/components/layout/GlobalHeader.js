@@ -23,12 +23,12 @@ class GlobalHeader extends Component {
   };
 
   render() {
-    let url = window.location.href.substr(
-      window.location.href.lastIndexOf("/") + 1
-    );
+    // let url = window.location.href.substr(
+    //   window.location.href.lastIndexOf("/") + 1
+    // );
 
     const { href } = this.state;
-    let selectedKey = href === "" ? "index" : url;
+    let selectedKey = href === "" ? "index" : href;
     const { isAuthenticated, user } = this.props.auth;
     const registerLink = (
       <Menu.Item key="register" style={{ float: "right" }}>
