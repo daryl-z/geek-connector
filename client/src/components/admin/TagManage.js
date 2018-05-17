@@ -29,7 +29,7 @@ class TagMangage extends Component {
   handleClose = removedTag => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
     console.log(tags);
-    this.setState({ tags });
+    this.setState({ tags }, this.props.editCategory(tags));
   };
 
   showInput = () => {
@@ -68,6 +68,9 @@ class TagMangage extends Component {
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
           <GlobalSider />
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
+            <div style={{ fontSize: "36px", marginBottom: "20px" }}>
+              分类管理
+            </div>
             <div>
               {tags.map((tag, index) => {
                 const isLongTag = tag.length > 20;

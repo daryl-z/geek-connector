@@ -20,7 +20,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from "draftjs-to-html";
 // import htmlToDraft from "html-to-draftjs";
 
-import { addPost } from "../../actions/postActions";
+import { addPost, getCategory } from "../../actions/postActions";
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -98,6 +98,10 @@ class PostForm extends Component {
     });
   };
 
+  componentWillMount() {
+    this.props.getCategory();
+  }
+
   componentWillReceiveProps(newProps) {
     if (newProps.errors) {
       console.log(newProps.errors);
@@ -134,6 +138,8 @@ class PostForm extends Component {
     const { tags, inputVisible, inputValue } = this.state;
     const { getFieldDecorator } = this.props.form;
 
+    let categories = this.props.post.category;
+    // const cateOption =
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -206,13 +212,11 @@ class PostForm extends Component {
                     onChange={this.handleChange}
                     placeholder="帖子分类"
                   >
-                    <Option value="HTML/CSS">HTML/CSS</Option>
-                    <Option value="JavaScript">JavaScript</Option>
-                    <Option value="React">React</Option>
-                    <Option value="Vue">Vue</Option>
-                    <Option value="NodeJS">NodeJS</Option>
-                    <Option value="Java">Java</Option>
-                    <Option value="other">其他</Option>
+                    {categories.map(option => (
+                      <Option value={option} key={option}>
+                        {option}
+                      </Option>
+                    ))}
                   </Select>
                 )}
               </Col>
@@ -319,15 +323,17 @@ class PostForm extends Component {
 
 PostForm.propTypes = {
   addPost: PropTypes.func.isRequired,
+  getCategory: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  post: state.post
 });
 
-export default connect(mapStateToProps, { addPost })(
+export default connect(mapStateToProps, { addPost, getCategory })(
   Form.create()(withRouter(PostForm))
 );

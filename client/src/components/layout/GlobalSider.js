@@ -31,7 +31,7 @@ class GlobalSider extends Component {
             }
           >
             <Menu.Item key="tagmanage">
-              <Link to="/admin/tag-manage">标签管理</Link>
+              <Link to="/admin/tag-manage">分类管理</Link>
             </Menu.Item>
           </SubMenu>
         </Menu>
