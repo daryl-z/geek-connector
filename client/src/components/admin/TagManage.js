@@ -3,15 +3,21 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Layout, BackTop, Tag, Input, Tooltip, Icon } from "antd";
 import GlobalSider from "../layout/GlobalSider";
-
+import { getCategory } from "../../actions/postActions";
 const { Content } = Layout;
 
-class AdminDashboard extends Component {
+class TagMangage extends Component {
   state = {
-    tags: ["Unremovable", "Tag 2", "Tag 3"],
+    tags: this.props.post.category,
     inputVisible: false,
     inputValue: ""
   };
+
+  componentWillMount() {
+    this.props.getCategory();
+
+    // console.log(this.props.post.category);
+  }
 
   handleClose = removedTag => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
@@ -44,6 +50,7 @@ class AdminDashboard extends Component {
 
   saveInputRef = input => (this.input = input);
   render() {
+    console.log(this.props.post.category);
     const { tags, inputVisible, inputValue } = this.state;
     return (
       <Content style={{ padding: "0 50px" }}>
@@ -88,7 +95,7 @@ class AdminDashboard extends Component {
                   onClick={this.showInput}
                   style={{ background: "#fff", borderStyle: "dashed" }}
                 >
-                  <Icon type="plus" /> New Tag
+                  <Icon type="plus" /> 新的分类
                 </Tag>
               )}
             </div>
@@ -98,4 +105,9 @@ class AdminDashboard extends Component {
     );
   }
 }
-export default AdminDashboard;
+
+TagMangage.propTypes = {
+  post: PropTypes.object.isRequired
+};
+const mapStateToProps = state => ({ post: state.post });
+export default connect(mapStateToProps, { getCategory })(TagMangage);

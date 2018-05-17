@@ -10,7 +10,8 @@ import {
   DELETE_POST,
   SET_CURRENT_PAGE,
   SET_CURRENT_DATA,
-  GET_CATEGORY
+  GET_CATEGORY,
+  EDIT_CATEGORY
 } from "./types";
 
 // 发帖
@@ -67,6 +68,24 @@ export const getCategory = () => dispatch => {
       dispatch({
         type: GET_CATEGORY,
         payload: null
+      })
+    );
+};
+
+export const editCategory = cateData => dispatch => {
+  dispatch(clearErrors());
+  axios
+    .post("/api/admin/edit-category", cateData)
+    .then(res =>
+      dispatch({
+        type: EDIT_CATEGORY,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response ? err.response.data : ""
       })
     );
 };

@@ -39,10 +39,19 @@ router.post("/edit-category", (req, res) => {
     //如果出错，返回400状态吗和错误对象
     return res.status(400).json(errors);
   }
-  const newCate = new Category({
-    category: req.body.category
-  });
-  newCate.save().then(cate => res.json(cate));
+  // const newCate = new Category({
+  //   category: req.body.category
+  // });
+  const newCate = [req.body.category];
+
+  Category.findByIdAndUpdate(
+    "5afa97d41861323648086e51",
+    { category: newCate },
+    { new: true }
+  )
+    .then(cate => res.json(cate))
+    .catch(err => res.status(404).json(err));
+  // newCate.save().then(cate => res.json(cate));
 });
 
 // @route get api/admin/category

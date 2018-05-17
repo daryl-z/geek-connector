@@ -5,7 +5,9 @@ import {
   DELETE_POST,
   POST_LOADING,
   SET_CURRENT_DATA,
-  SET_CURRENT_PAGE
+  SET_CURRENT_PAGE,
+  GET_CATEGORY,
+  EDIT_CATEGORY
 } from "../actions/types";
 
 const initialState = {
@@ -57,6 +59,11 @@ export default function(state = initialState, action) {
         current: action.payload
       };
     case GET_CATEGORY:
+      return {
+        ...state,
+        category: action.payload
+      };
+    case EDIT_CATEGORY:
       return {
         ...state,
         category: action.payload
