@@ -8,6 +8,7 @@
     "china-division": "^2.0.0",
     "draft-js": "^0.10.5",
     "draftjs-to-html": "^0.8.3",
+    "echarts": "^4.1.0",
     "html-to-draftjs": "^1.4.0",
     "json-loader": "^0.5.7",
     "jwt-decode": "^2.2.0",
