@@ -61,7 +61,7 @@ export const getCategory = () => dispatch => {
     .then(res =>
       dispatch({
         type: GET_CATEGORY,
-        payload: res.data
+        payload: res.data[0].category
       })
     )
     .catch(err =>

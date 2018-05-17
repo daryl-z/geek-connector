@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Layout, BackTop, Tag, Input, Tooltip, Icon } from "antd";
 import GlobalSider from "../layout/GlobalSider";
-import { getCategory } from "../../actions/postActions";
+import { getCategory, editCategory } from "../../actions/postActions";
 const { Content } = Layout;
 
 class TagMangage extends Component {
   state = {
-    tags: this.props.post.category,
+    tags: [],
     inputVisible: false,
     inputValue: ""
   };
@@ -19,6 +19,13 @@ class TagMangage extends Component {
     // console.log(this.props.post.category);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.post.category) {
+      if (nextProps.post.category.length > 0) {
+        this.setState({ tags: nextProps.post.category });
+      }
+    }
+  }
   handleClose = removedTag => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
     console.log(tags);
@@ -41,11 +48,14 @@ class TagMangage extends Component {
       tags = [...tags, inputValue];
     }
     console.log(tags);
-    this.setState({
-      tags,
-      inputVisible: false,
-      inputValue: ""
-    });
+    this.setState(
+      {
+        tags,
+        inputVisible: false,
+        inputValue: ""
+      },
+      this.props.editCategory(tags)
+    );
   };
 
   saveInputRef = input => (this.input = input);
@@ -63,8 +73,9 @@ class TagMangage extends Component {
                 const isLongTag = tag.length > 20;
                 const tagElem = (
                   <Tag
+                    color="blue"
                     key={tag}
-                    closable={index !== 0}
+                    closable={true}
                     afterClose={() => this.handleClose(tag)}
                   >
                     {isLongTag ? `${tag.slice(0, 20)}...` : tag}
@@ -110,4 +121,6 @@ TagMangage.propTypes = {
   post: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({ post: state.post });
-export default connect(mapStateToProps, { getCategory })(TagMangage);
+export default connect(mapStateToProps, { getCategory, editCategory })(
+  TagMangage
+);

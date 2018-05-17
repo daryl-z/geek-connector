@@ -3,11 +3,12 @@ const isEmpty = require("./is-empty");
 
 module.exports = function validateCateInput(data) {
   let errors = {};
-  data.category = !isEmpty(data.category) ? data.category : "";
-
-  if (!validator.isLength(data.category, { min: 1, max: 20 })) {
-    errors.category = "分类字数只能在1到20之间";
-  }
+  data.forEach(cate => {
+    cate = !isEmpty(cate) ? cate : "";
+    if (!validator.isLength(cate, { min: 1, max: 100 })) {
+      errors.category = "分类字数只能在1到100之间";
+    }
+  });
 
   return {
     errors,
