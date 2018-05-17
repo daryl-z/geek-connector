@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import echarts from "echarts/lib/echarts";
 // 引入柱状图
 import "echarts/lib/chart/bar";
+import "echarts/lib/chart/line";
 // 引入提示框和标题组件
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/title";
@@ -14,23 +15,36 @@ class EchartsDemo extends Component {
     var myChart = echarts.init(document.getElementById("main"));
     // 绘制图表
     myChart.setOption({
-      title: { text: "ECharts 入门示例" },
+      title: { text: "最近一年用户注册数量" },
       tooltip: {},
       xAxis: {
-        data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+        data: [
+          "七月",
+          "八月",
+          "九月",
+          "十月",
+          "十一月",
+          "十二",
+          "一月",
+          "二月",
+          "三月",
+          "四月",
+          "五月",
+          "六月"
+        ]
       },
       yAxis: {},
       series: [
         {
-          name: "销量",
-          type: "bar",
-          data: [5, 20, 36, 10, 10, 20]
+          name: "人数",
+          type: "line",
+          data: [5, 6, 16, 14, 10, 20, 45, 40, 50, 60, 55, 21]
         }
       ]
     });
   }
   render() {
-    return <div id="main" style={{ width: 400, height: 400 }} />;
+    return <div id="main" style={{ width: 1200, height: 400 }} />;
   }
 }
 
