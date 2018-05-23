@@ -30,6 +30,7 @@ class TagMangage extends Component {
   handleClose = removedTag => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
     this.setState({ tags }, this.props.editCategory(tags));
+    window.location.href = "/admin/tag-manage";
   };
 
   showInput = () => {
@@ -55,6 +56,7 @@ class TagMangage extends Component {
       },
       this.props.editCategory(tags)
     );
+    window.location.href = "/admin/tag-manage";
   };
 
   getLineOption = () => {
