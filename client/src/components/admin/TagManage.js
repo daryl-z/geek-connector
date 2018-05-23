@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Layout, BackTop, Tag, Input, Tooltip, Icon } from "antd";
 import GlobalSider from "../layout/GlobalSider";
-import { getCategory, editCategory } from "../../actions/postActions";
-import EchartsDemo from "./EchartsDemo";
+import { getCategory, editCategory, getPosts } from "../../actions/postActions";
+import ReactEcharts from "echarts-for-react";
 
 const { Content } = Layout;
 
@@ -17,8 +17,7 @@ class TagMangage extends Component {
 
   componentWillMount() {
     this.props.getCategory();
-
-    // console.log(this.props.post.category);
+    this.props.getPosts();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,11 +57,16 @@ class TagMangage extends Component {
     );
   };
 
-  saveInputRef = input => (this.input = input);
-  render() {
-    let { category } = this.props.post;
-    const { tags, inputVisible, inputValue } = this.state;
-    let options = {
+  getLineOption = () => {
+    let { category, posts } = this.props.post;
+    console.log(posts);
+    let postsCounts = [];
+    category.map(cate => {
+      let count = 0;
+      posts.map(post => (post.category === cate ? (count = count + 1) : count));
+      postsCounts.push(count);
+    });
+    let option = {
       title: { text: "不同分类下的文章数" },
       tooltip: {},
       xAxis: {
@@ -73,12 +77,16 @@ class TagMangage extends Component {
         {
           name: "文章数",
           type: "bar",
-          data: [5, 6, 16, 14, 10, 20, 45, 40, 50, 60, 55, 21]
+          data: postsCounts
         }
       ]
     };
-    console.log(category);
+    return option;
+  };
 
+  saveInputRef = input => (this.input = input);
+  render() {
+    const { tags, inputVisible, inputValue } = this.state;
     return (
       <Content style={{ padding: "0 50px" }}>
         <BackTop />
@@ -131,7 +139,13 @@ class TagMangage extends Component {
               )}
             </div>
             <div>
-              <EchartsDemo options={options} />
+              <ReactEcharts
+                notMerge
+                lazyUpdate
+                option={this.getLineOption()}
+                style={{ width: "80%", height: 350 }}
+                theme="macarons"
+              />
             </div>
           </Content>
         </Layout>
@@ -144,6 +158,8 @@ TagMangage.propTypes = {
   post: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({ post: state.post });
-export default connect(mapStateToProps, { getCategory, editCategory })(
-  TagMangage
-);
+export default connect(mapStateToProps, {
+  getCategory,
+  editCategory,
+  getPosts
+})(TagMangage);
