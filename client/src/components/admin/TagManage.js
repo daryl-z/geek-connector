@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { Layout, BackTop, Tag, Input, Tooltip, Icon } from "antd";
 import GlobalSider from "../layout/GlobalSider";
 import { getCategory, editCategory } from "../../actions/postActions";
+import EchartsDemo from "./EchartsDemo";
+
 const { Content } = Layout;
 
 class TagMangage extends Component {
@@ -28,7 +30,6 @@ class TagMangage extends Component {
   }
   handleClose = removedTag => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
-    console.log(tags);
     this.setState({ tags }, this.props.editCategory(tags));
   };
 
@@ -47,7 +48,6 @@ class TagMangage extends Component {
     if (inputValue && tags.indexOf(inputValue) === -1) {
       tags = [...tags, inputValue];
     }
-    console.log(tags);
     this.setState(
       {
         tags,
@@ -60,8 +60,25 @@ class TagMangage extends Component {
 
   saveInputRef = input => (this.input = input);
   render() {
-    console.log(this.props.post.category);
+    let { category } = this.props.post;
     const { tags, inputVisible, inputValue } = this.state;
+    let options = {
+      title: { text: "不同分类下的文章数" },
+      tooltip: {},
+      xAxis: {
+        data: category
+      },
+      yAxis: {},
+      series: [
+        {
+          name: "文章数",
+          type: "bar",
+          data: [5, 6, 16, 14, 10, 20, 45, 40, 50, 60, 55, 21]
+        }
+      ]
+    };
+    console.log(category);
+
     return (
       <Content style={{ padding: "0 50px" }}>
         <BackTop />
@@ -112,6 +129,9 @@ class TagMangage extends Component {
                   <Icon type="plus" /> 新的分类
                 </Tag>
               )}
+            </div>
+            <div>
+              <EchartsDemo options={options} />
             </div>
           </Content>
         </Layout>
