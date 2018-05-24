@@ -22,8 +22,14 @@ class GlobalSider extends Component {
               Dashboard
             </Link>
           </Menu.Item>
+          <Menu.Item key="usermange">
+            <Link to="/admin/user-manage">
+              <Icon type="user" />
+              用户管理
+            </Link>
+          </Menu.Item>
           <SubMenu
-            key="sub2"
+            key="postmanage"
             title={
               <span>
                 <Icon type="laptop" />帖子管理
@@ -33,7 +39,22 @@ class GlobalSider extends Component {
             <Menu.Item key="tagmanage">
               <Link to="/admin/tag-manage">分类管理</Link>
             </Menu.Item>
+            <Menu.Item key="postmanage">
+              <Link to="/admin/post-manage">帖子管理</Link>
+            </Menu.Item>
           </SubMenu>
+          {/* <SubMenu
+            key="usermanage"
+            title={
+              <span>
+                <Icon type="user" />用户管理
+              </span>
+            }
+          >
+            <Menu.Item key="tagmanage">
+              <Link to="/admin/tag-manage">管理</Link>
+            </Menu.Item>
+          </SubMenu> */}
         </Menu>
       </Sider>
     );

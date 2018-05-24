@@ -59,13 +59,13 @@ class Dashboard extends Component {
             <Experience experience={profile.experience} />
             <Education education={profile.education} />
             <div style={{ marginBottom: "60px" }} />
-            <Button
+            {/* <Button
               type="danger"
               style={{ margin: "20px 20px" }}
               onClick={this.onDeleteClick}
             >
               删除我的账号
-            </Button>
+            </Button> */}
           </div>
         );
       } else {

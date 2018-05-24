@@ -25,6 +25,8 @@ import NotFound from "../not-found/NotFound";
 import MyCloud from "../tagcloud/TagCloud";
 import AdminDashboard from "../admin/AdminDashboard";
 import TagManage from "../admin/TagManage";
+import UserManage from "../admin/UserManage";
+import PostManage from "../admin/PostManage";
 
 class BasicLayout extends Component {
   state = {
@@ -79,8 +81,20 @@ class BasicLayout extends Component {
               <Switch>
                 <AdminRoute exact path="/admin" component={AdminDashboard} />
               </Switch>
+
               <Switch>
-                <AdminRoute exact path="/dashboard" component={Dashboard} />
+                <AdminRoute
+                  exact
+                  path="/admin/user-manage"
+                  component={UserManage}
+                />
+              </Switch>
+              <Switch>
+                <AdminRoute
+                  exact
+                  path="/admin/post-manage"
+                  component={PostManage}
+                />
               </Switch>
               <Switch>
                 <PrivateRoute
@@ -88,6 +102,9 @@ class BasicLayout extends Component {
                   path="/create-profile"
                   component={CreateProfile}
                 />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
               <Switch>
                 <PrivateRoute

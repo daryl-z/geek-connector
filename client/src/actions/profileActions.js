@@ -123,7 +123,7 @@ export const deleteEducation = id => dispatch => {
 
 // 删除账号和简介
 export const deleteAccount = () => dispatch => {
-  if (window.confirm("Are you sure? This can NOT be undone!")) {
+  if (window.confirm("你确定? 此项操作不可撤销!")) {
     axios
       .delete("/api/profile")
       .then(res =>

@@ -55,4 +55,73 @@ router.post("/edit-category", (req, res) => {
 // post
 
 // user
+// @route E api/profile
+// @desc 删除用户的所有信息 相当于用户可以删除自己账号的所有信息
+// @access Private
+router.delete(
+  "/user/:user_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOneAndRemove({ user: req.user.id }).then(() => {
+      User.findOneAndRemove({ _id: req.user.id }).then(() =>
+        req.json({ success: true })
+      );
+    });
+  }
+);
+
+// @route Delete api/posts/:id
+// @desc 删除post
+// @access Private
+router.delete(
+  "/post/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      Post.findById(req.params.id)
+        .then(post => {
+          if (post.user.toString() !== req.user.id) {
+            return res
+              .status(401)
+              .json({ notauthrized: "当前用户没有删除其他用户帖子的权限！！" });
+          }
+          // Model.prototype.remove() 从数据库移除当前文档
+          post.remove().then(() => res.json({ success: true }));
+        })
+        .catch(err => res.status(404).json({ postnotfound: "没有找到帖子" }));
+    });
+  }
+);
+
+router.delete(
+  "/comment/:id/:comment_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then(post => {
+        // 检查评论是否存在 如果不存在就404
+        if (
+          post.comments.filter(
+            comment => comment._id.toString() === req.params.comment_id
+          ).length === 0
+        ) {
+          return res
+            .status(404)
+            .json({ commentnotexists: "要删除的评论不存在" });
+        }
+
+        // 获取下标
+        const removeIndex = post.comments
+          .map(item => item._id.toString())
+          .indexOf(req.params.comment_id);
+
+        // 移除评论
+        post.comments.splice(removeIndex, 1);
+
+        post.save().then(post => res.json(post));
+      })
+      .catch(err => res.status(404).json({ postnotfound: "没找到帖子" }));
+  }
+);
+
 module.exports = router;
