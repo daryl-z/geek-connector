@@ -12,6 +12,7 @@ import Login from "../auth/Login";
 import Register from "../auth/Register";
 import Dashboard from "../dashboard/Dashboard";
 import PrivateRoute from "../common/PrivateRoute";
+import AdminRoute from "../common/AdminRoute";
 import CreateProfile from "../create-profile/CreateProfile";
 import EditProfile from "../edit-profile/EditProfile";
 import AddExperience from "../add-credentials/AddExperience";
@@ -23,7 +24,6 @@ import Post from "../post/Post";
 import NotFound from "../not-found/NotFound";
 import MyCloud from "../tagcloud/TagCloud";
 import AdminDashboard from "../admin/AdminDashboard";
-import AdminLogin from "../admin/AdminLogin";
 import TagManage from "../admin/TagManage";
 
 class BasicLayout extends Component {
@@ -69,11 +69,18 @@ class BasicLayout extends Component {
               <Route exact path="/profiles" component={Profiles} />
               <Route exact path="/profile/:handle" component={Profile} />
               <Route exact path="/tagcloud" component={MyCloud} />
-              <Route exact path="/admin" component={AdminDashboard} />
-              <Route exact path="/admin/login" component={AdminLogin} />
-              <Route exact path="/admin/tag-manage" component={TagManage} />
               <Switch>
-                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                <AdminRoute
+                  exact
+                  path="/admin/tag-manage"
+                  component={TagManage}
+                />
+              </Switch>
+              <Switch>
+                <AdminRoute exact path="/admin" component={AdminDashboard} />
+              </Switch>
+              <Switch>
+                <AdminRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
               <Switch>
                 <PrivateRoute

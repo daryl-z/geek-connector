@@ -140,7 +140,7 @@ class TagMangage extends Component {
                 </Tag>
               )}
             </div>
-            <div>
+            <div style={{ marginTop: "30px" }}>
               <ReactEcharts
                 notMerge
                 lazyUpdate

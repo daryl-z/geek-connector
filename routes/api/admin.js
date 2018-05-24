@@ -8,7 +8,6 @@ const passport = require("passport");
 const nodemailer = require("nodemailer");
 const validateCateInput = require("../../validation/category");
 // Load User model
-const Admin = require("../../models/Admin");
 const Category = require("../../models/Category");
 
 router.get("/test", (req, res) => res.json({ msg: "admin Works" }));

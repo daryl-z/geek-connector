@@ -19,7 +19,7 @@ if (localStorage.jwtToken) {
   store.dispatch(setCurrentUser(decoded));
 
   const currentTime = Date.now() / 1000;
-
+  console.log(decoded);
   if (decoded.exp < currentTime) {
     // 登出并移除简介
     store.dispatch(logoutUser());
