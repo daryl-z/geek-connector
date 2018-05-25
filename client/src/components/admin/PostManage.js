@@ -3,13 +3,20 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Layout, BackTop, Tag, Input, Tooltip, Icon } from "antd";
 import GlobalSider from "../layout/GlobalSider";
-import { getCategory, editCategory, getPosts } from "../../actions/postActions";
+import { getPosts } from "../../actions/postActions";
 import ReactEcharts from "echarts-for-react";
+import PostFeed from "../posts/PostFeed";
 
 const { Content } = Layout;
 
 class PostManage extends Component {
+  componentWillMount() {
+    this.props.getPosts();
+  }
   render() {
+    const { posts } = this.props.post;
+    const { auth } = this.props;
+
     return (
       <Content style={{ padding: "0 50px" }}>
         <BackTop />
@@ -19,6 +26,7 @@ class PostManage extends Component {
             <div style={{ fontSize: "36px", marginBottom: "20px" }}>
               帖子管理
             </div>
+            <PostFeed posts={posts} auth={auth} />
           </Content>
         </Layout>
       </Content>
@@ -29,9 +37,9 @@ class PostManage extends Component {
 PostManage.propTypes = {
   post: PropTypes.object.isRequired
 };
-const mapStateToProps = state => ({ post: state.post });
+
+const mapStateToProps = state => ({ post: state.post, auth: state.auth });
+
 export default connect(mapStateToProps, {
-  getCategory,
-  editCategory,
   getPosts
 })(PostManage);

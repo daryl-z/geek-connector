@@ -1,9 +1,23 @@
 import React, { Component } from "react";
-import { List, Avatar, Button, Spin, Icon, Col, Row } from "antd";
+import {
+  List,
+  Avatar,
+  Button,
+  Spin,
+  Icon,
+  Col,
+  Row,
+  Popconfirm,
+  message
+} from "antd";
 import { withRouter, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { setCurrentData, setCurrentPage } from "../../actions/postActions";
+import {
+  setCurrentData,
+  setCurrentPage,
+  adminDeletePost
+} from "../../actions/postActions";
 class PostFeed extends Component {
   createMarkup = htmlcode => ({
     __html: htmlcode
@@ -46,7 +60,7 @@ class PostFeed extends Component {
   }
 
   render() {
-    let { posts } = this.props;
+    let { posts, auth, adminDeletePost } = this.props;
     const { setCurrentData, setCurrentPage } = this.props;
     const { current, currentData } = this.props.post;
     // List分页
@@ -68,6 +82,14 @@ class PostFeed extends Component {
       </span>
     );
 
+    const popContent = "你确定要删除此项吗?";
+
+    function confirm(id) {
+      adminDeletePost(id);
+      // console.log(adminDeletePost(id));
+      message.info("删除成功");
+    }
+
     return currentData ? (
       <List
         pagination={pagination}
@@ -81,27 +103,44 @@ class PostFeed extends Component {
         }
         renderItem={item => (
           <List.Item
-            actions={[
-              <IconText
-                type={this.findUserLike(item.likes) ? "like" : "like-o"}
-                text={item.likes ? item.likes.length : "0"}
-                onClick={e => this.onLikeClick(item._id)}
-                style={{ zIndex: "200" }}
-              />,
-              <IconText
-                type={
-                  this.findUserUnlike(item.unlikes) ? "dislike" : "dislike-o"
-                }
-                text={item.unlikes ? item.unlikes.length : "0"}
-                onClick={() => this.onUnlikeClick(item._id)}
-              />,
-              <Link to={`/post/${item._id}`}>
-                <IconText
-                  type="message"
-                  text={item.comments ? item.comments.length : "0"}
-                />
-              </Link>
-            ]}
+            actions={
+              auth.user.admin === true
+                ? [
+                    <Popconfirm
+                      placement="left"
+                      title={popContent}
+                      onConfirm={() => confirm(item._id)}
+                      // onConfirm={() => console.log(item._id)}
+                      okText="是"
+                      cancelText="否"
+                    >
+                      <a style={{ color: "red" }}>删除</a>
+                    </Popconfirm>
+                  ]
+                : [
+                    <IconText
+                      type={this.findUserLike(item.likes) ? "like" : "like-o"}
+                      text={item.likes ? item.likes.length : "0"}
+                      onClick={e => this.onLikeClick(item._id)}
+                      style={{ zIndex: "200" }}
+                    />,
+                    <IconText
+                      type={
+                        this.findUserUnlike(item.unlikes)
+                          ? "dislike"
+                          : "dislike-o"
+                      }
+                      text={item.unlikes ? item.unlikes.length : "0"}
+                      onClick={() => this.onUnlikeClick(item._id)}
+                    />,
+                    <Link to={`/post/${item._id}`}>
+                      <IconText
+                        type="message"
+                        text={item.comments ? item.comments.length : "0"}
+                      />
+                    </Link>
+                  ]
+            }
           >
             <List.Item.Meta
               avatar={<Avatar src={item.avatar} />}
@@ -137,12 +176,15 @@ class PostFeed extends Component {
 
 PostFeed.propTypes = {
   setCurrentData: PropTypes.func.isRequired,
-  setCurrentPage: PropTypes.func.isRequired
+  setCurrentPage: PropTypes.func.isRequired,
+  adminDeletePost: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   post: state.post
 });
-export default connect(mapStateToProps, { setCurrentData, setCurrentPage })(
-  withRouter(PostFeed)
-);
+export default connect(mapStateToProps, {
+  setCurrentData,
+  setCurrentPage,
+  adminDeletePost
+})(withRouter(PostFeed));

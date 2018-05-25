@@ -146,8 +146,10 @@ export const deletePost = id => dispatch => {
 
 //管理员删除帖子
 export const adminDeletePost = id => dispatch => {
+  console.log(id);
   axios
     .delete(`/api/admin/posts/${id}`)
+    // .then(res => console.log(res + "ceshi"))
     .then(res =>
       dispatch({
         type: ADMIN_DELETE_POST,
