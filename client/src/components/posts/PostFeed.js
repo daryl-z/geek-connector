@@ -81,7 +81,7 @@ class PostFeed extends Component {
         {text}
       </span>
     );
-
+    // console.log(window.location.pathname);
     const popContent = "你确定要删除此项吗?";
 
     function confirm(id) {
@@ -104,7 +104,7 @@ class PostFeed extends Component {
         renderItem={item => (
           <List.Item
             actions={
-              auth.user.admin === true
+              auth.user.admin === true && window.location.pathname !== "/"
                 ? [
                     <Popconfirm
                       placement="left"
