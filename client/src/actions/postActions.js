@@ -11,7 +11,8 @@ import {
   SET_CURRENT_PAGE,
   SET_CURRENT_DATA,
   GET_CATEGORY,
-  EDIT_CATEGORY
+  EDIT_CATEGORY,
+  ADMIN_DELETE_POST
 } from "./types";
 
 // 发帖
@@ -72,6 +73,7 @@ export const getCategory = () => dispatch => {
     );
 };
 
+//编辑分类
 export const editCategory = cateData => dispatch => {
   dispatch(clearErrors());
   axios
@@ -90,7 +92,7 @@ export const editCategory = cateData => dispatch => {
     );
 };
 
-//
+//设置分页
 export const setCurrentData = currentData => dispatch => {
   dispatch({
     type: SET_CURRENT_DATA,
@@ -124,13 +126,31 @@ export const getPost = id => dispatch => {
     );
 };
 
-// 删除帖子
+// 用户删除自己的帖子
 export const deletePost = id => dispatch => {
   axios
     .delete(`/api/posts/${id}`)
     .then(res =>
       dispatch({
         type: DELETE_POST,
+        payload: id
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+//管理员删除帖子
+export const adminDeletePost = id => dispatch => {
+  axios
+    .delete(`/api/admin/posts/${id}`)
+    .then(res =>
+      dispatch({
+        type: ADMIN_DELETE_POST,
         payload: id
       })
     )

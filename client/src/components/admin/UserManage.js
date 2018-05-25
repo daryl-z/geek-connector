@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Layout, BackTop, Tag, Input, Tooltip, Icon } from "antd";
 import GlobalSider from "../layout/GlobalSider";
-import { getCategory, editCategory, getPosts } from "../../actions/postActions";
+import { deleteUser } from "../../actions/profileActions";
 import ReactEcharts from "echarts-for-react";
+import Profiles from "../profiles/Profiles";
 
 const { Content } = Layout;
 
@@ -19,6 +20,7 @@ class UserManage extends Component {
             <div style={{ fontSize: "36px", marginBottom: "20px" }}>
               用户管理
             </div>
+            <Profiles extra={true} />
           </Content>
         </Layout>
       </Content>
@@ -26,12 +28,10 @@ class UserManage extends Component {
   }
 }
 
-UserManage.propTypes = {
-  post: PropTypes.object.isRequired
-};
+// UserManage.propTypes = {
+//   post: PropTypes.object.isRequired
+// };
 const mapStateToProps = state => ({ post: state.post });
 export default connect(mapStateToProps, {
-  getCategory,
-  editCategory,
-  getPosts
+  deleteUser
 })(UserManage);

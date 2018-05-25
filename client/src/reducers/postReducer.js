@@ -7,7 +7,8 @@ import {
   SET_CURRENT_DATA,
   SET_CURRENT_PAGE,
   GET_CATEGORY,
-  EDIT_CATEGORY
+  EDIT_CATEGORY,
+  ADMIN_DELETE_POST
 } from "../actions/types";
 
 const initialState = {
@@ -44,6 +45,11 @@ export default function(state = initialState, action) {
         posts: [action.payload, ...state.posts]
       };
     case DELETE_POST:
+      return {
+        ...state,
+        posts: state.posts.filter(post => post._id !== action.payload)
+      };
+    case ADMIN_DELETE_POST:
       return {
         ...state,
         posts: state.posts.filter(post => post._id !== action.payload)

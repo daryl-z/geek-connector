@@ -5,7 +5,8 @@ import {
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
-  SET_CURRENT_USER
+  SET_CURRENT_USER,
+  DELETE_USER
 } from "./types";
 
 // 获取当前简介
@@ -121,7 +122,7 @@ export const deleteEducation = id => dispatch => {
     );
 };
 
-// 删除账号和简介
+// 删除当前账号和简介
 export const deleteAccount = () => dispatch => {
   if (window.confirm("你确定? 此项操作不可撤销!")) {
     axios
@@ -139,6 +140,24 @@ export const deleteAccount = () => dispatch => {
         })
       );
   }
+};
+
+// 管理员删除用户
+export const deleteUser = user_id => dispatch => {
+  axios
+    .delete(`/api/admin/user/${user_id}`)
+    .then(res =>
+      dispatch({
+        type: DELETE_USER,
+        payload: user_id
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
 };
 
 // 简介加载中

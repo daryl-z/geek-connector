@@ -1,9 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Spin, Row, Col, Card, Avatar, Layout, Tag } from "antd";
+import {
+  Spin,
+  Row,
+  Col,
+  Card,
+  Avatar,
+  Layout,
+  Tag,
+  Icon,
+  Popconfirm,
+  message
+} from "antd";
 
-import { getProfiles } from "../../actions/profileActions";
+import { getProfiles, deleteUser } from "../../actions/profileActions";
 import { Link } from "react-router-dom";
 import isEmpty from "../../validation/is-empty";
 import getLocation from "../common/get-location";
@@ -17,8 +28,15 @@ class Profiles extends Component {
 
   render() {
     const { profiles, loading } = this.props.profile;
+    const { deleteUser } = this.props;
     let profileItems;
     // console.log(profiles);
+    const popContent = "你确定要删除此项吗?";
+
+    function confirm(id) {
+      deleteUser(id);
+      message.info("删除成功");
+    }
 
     if (profiles === null || loading) {
       profileItems = (
@@ -41,6 +59,20 @@ class Profiles extends Component {
                   &nbsp;
                   {profile.user.name}
                 </div>
+              }
+              extra={
+                this.props.extra && (
+                  <Popconfirm
+                    placement="left"
+                    title={popContent}
+                    onConfirm={() => confirm(profile.user._id)}
+                    // onConfirm={() => console.log(profile.user)}
+                    okText="是"
+                    cancelText="否"
+                  >
+                    <a style={{ color: "red" }}>删除</a>
+                  </Popconfirm>
+                )
               }
               bordered={true}
               actions={[
@@ -83,8 +115,8 @@ class Profiles extends Component {
       <Content style={{ padding: "0 50px" }}>
         <Layout style={{ padding: "24px 20px", background: "#fff" }}>
           <div>
-            <h1>其他开发者</h1>
-            <p>为您推荐更多的开发者</p>
+            <h1>{this.props.title}</h1>
+            <p>{this.props.details}</p>
             <Row gutter={16}>{profileItems} </Row>
           </div>
         </Layout>
@@ -95,6 +127,7 @@ class Profiles extends Component {
 
 Profiles.propTypes = {
   getProfiles: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired
 };
 
@@ -102,4 +135,4 @@ const mapStateToProps = state => ({
   profile: state.profile
 });
 
-export default connect(mapStateToProps, { getProfiles })(Profiles);
+export default connect(mapStateToProps, { getProfiles, deleteUser })(Profiles);

@@ -68,7 +68,17 @@ class BasicLayout extends Component {
             <div>
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
-              <Route exact path="/profiles" component={Profiles} />
+              <Route
+                exact
+                path="/profiles"
+                render={props => (
+                  <Profiles
+                    {...props}
+                    title="所有开发者"
+                    details="为您推荐更多的开发者"
+                  />
+                )}
+              />
               <Route exact path="/profile/:handle" component={Profile} />
               <Route exact path="/tagcloud" component={MyCloud} />
               <Switch>
